@@ -1,4 +1,4 @@
-package minesweeper.core;
+package sk.tsystems.gamestudio.minesweeper.core;
 
 /**
  * Clue tile.

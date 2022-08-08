@@ -1,10 +1,7 @@
-package minesweeper;
+package sk.tsystems.gamestudio.minesweeper;
 
-import minesweeper.consoleui.ConsoleUI;
-import minesweeper.consoleui.Settings;
-import minesweeper.core.TooManyMinesException;
-
-import java.util.Set;
+import sk.tsystems.gamestudio.minesweeper.consoleui.ConsoleUI;
+import sk.tsystems.gamestudio.minesweeper.core.TooManyMinesException;
 
 /**
  * Main application class.

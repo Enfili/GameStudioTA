@@ -1,4 +1,4 @@
-package kamene.core;
+package sk.tsystems.gamestudio.kamene.core;
 
 import java.io.Serializable;
 

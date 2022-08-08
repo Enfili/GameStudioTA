@@ -1,4 +1,4 @@
-package minesweeper.consoleui;
+package sk.tsystems.gamestudio.minesweeper.consoleui;
 
 import java.io.*;
 

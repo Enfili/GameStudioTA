@@ -1,9 +1,12 @@
-package kamene;
+package sk.tsystems.gamestudio.kamene;
 
 import kamene.core.*;
 import kamene.userInterface.*;
 import kamene.times.*;
 import service.*;
+import sk.tsystems.gamestudio.kamene.core.Field;
+import sk.tsystems.gamestudio.kamene.userInterface.ConsoleUI;
+import sk.tsystems.gamestudio.service.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +17,7 @@ public class Puzzle {
     Field field;
 
 
-    private final String GAME_NAME = "kamene";
+    private final String GAME_NAME = "sk/tsystems/gamestudio";
 
     public Puzzle() {
         final ScoreService scoreService = new ScoreServiceJDBC();

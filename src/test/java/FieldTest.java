@@ -1,11 +1,10 @@
 package test;
 
-import minesweeper.core.*;
-
 import java.util.Random;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sk.tsystems.gamestudio.minesweeper.core.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

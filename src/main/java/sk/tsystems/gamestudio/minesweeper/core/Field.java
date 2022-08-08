@@ -1,6 +1,4 @@
-package minesweeper.core;
-
-import minesweeper.Minesweeper;
+package sk.tsystems.gamestudio.minesweeper.core;
 
 import java.util.Random;
 

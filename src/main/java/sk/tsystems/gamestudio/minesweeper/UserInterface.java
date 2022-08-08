@@ -1,8 +1,8 @@
-package minesweeper;
+package sk.tsystems.gamestudio.minesweeper;
 
-import minesweeper.core.Field;
-import minesweeper.core.GameState;
-import minesweeper.core.TooManyMinesException;
+import sk.tsystems.gamestudio.minesweeper.core.Field;
+import sk.tsystems.gamestudio.minesweeper.core.GameState;
+import sk.tsystems.gamestudio.minesweeper.core.TooManyMinesException;
 
 public interface UserInterface {
     GameState newGameStarted(Field field) throws TooManyMinesException;

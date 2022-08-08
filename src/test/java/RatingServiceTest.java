@@ -1,11 +1,11 @@
 package test;
 
-import entity.Rating;
+import sk.tsystems.gamestudio.entity.Rating;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import service.GameStudioException;
-import service.RatingService;
-import service.RatingServiceJDBC;
+import sk.tsystems.gamestudio.service.GameStudioException;
+import sk.tsystems.gamestudio.service.RatingService;
+import sk.tsystems.gamestudio.service.RatingServiceJDBC;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,7 +24,7 @@ public class RatingServiceTest {
         try (var connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
              var statement = connection.createStatement()) {
             ratingService.reset();
-            Rating rating = new Rating("minesweeper", "jaro", 1, new Date());
+            Rating rating = new Rating("sk/tsystems/gamestudio", "jaro", 1, new Date());
             ratingService.setRating(rating);
             ratingService.setRating(rating);
 
@@ -39,23 +39,23 @@ public class RatingServiceTest {
 
     @Test
     public void testGetAverageRating() {
-        ratingService.setRating(new Rating("minesweeper", "jaro", 2, new Date()));
-        ratingService.setRating(new Rating("minesweeper", "juro", 1, new Date()));
-        ratingService.setRating(new Rating("minesweeper", "jano", 4, new Date()));
-        assertEquals(Math.round((2 + 1 + 4) / 3), ratingService.getAverageRating("minesweeper"));
+        ratingService.setRating(new Rating("sk/tsystems/gamestudio", "jaro", 2, new Date()));
+        ratingService.setRating(new Rating("sk/tsystems/gamestudio", "juro", 1, new Date()));
+        ratingService.setRating(new Rating("sk/tsystems/gamestudio", "jano", 4, new Date()));
+        assertEquals(Math.round((2 + 1 + 4) / 3), ratingService.getAverageRating("sk/tsystems/gamestudio"));
 
         ratingService.reset();
-        assertEquals(0, ratingService.getAverageRating("minesweeper"));
+        assertEquals(0, ratingService.getAverageRating("sk/tsystems/gamestudio"));
     }
 
     @Test
     public void testGetRating() {
         ratingService.reset();
-        assertEquals(0, ratingService.getRating("minesweeper", "username"));
+        assertEquals(0, ratingService.getRating("sk/tsystems/gamestudio", "username"));
 
-        ratingService.setRating(new Rating("minesweeper", "jaro", 1, new Date()));
-        assertEquals(0, ratingService.getRating("minesweeper", "username"));
-        assertEquals(0, ratingService.getRating("kamene", "jaro"));
-        assertEquals(1, ratingService.getRating("minesweeper", "jaro"));
+        ratingService.setRating(new Rating("sk/tsystems/gamestudio", "jaro", 1, new Date()));
+        assertEquals(0, ratingService.getRating("sk/tsystems/gamestudio", "username"));
+        assertEquals(0, ratingService.getRating("sk/tsystems/gamestudio", "jaro"));
+        assertEquals(1, ratingService.getRating("sk/tsystems/gamestudio", "jaro"));
     }
 }

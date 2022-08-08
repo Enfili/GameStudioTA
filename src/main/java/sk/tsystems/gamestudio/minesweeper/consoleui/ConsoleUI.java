@@ -1,4 +1,4 @@
-package minesweeper.consoleui;
+package sk.tsystems.gamestudio.minesweeper.consoleui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,15 +8,15 @@ import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import entity.Comment;
-import entity.Rating;
-import entity.Score;
-import minesweeper.Minesweeper;
-import minesweeper.UserInterface;
-import minesweeper.core.Field;
-import minesweeper.core.GameState;
-import minesweeper.core.TooManyMinesException;
+import sk.tsystems.gamestudio.entity.Comment;
+import sk.tsystems.gamestudio.entity.Rating;
+import sk.tsystems.gamestudio.entity.Score;
+import sk.tsystems.gamestudio.minesweeper.UserInterface;
+import sk.tsystems.gamestudio.minesweeper.core.Field;
+import sk.tsystems.gamestudio.minesweeper.core.GameState;
+import sk.tsystems.gamestudio.minesweeper.core.TooManyMinesException;
 import service.*;
+import sk.tsystems.gamestudio.service.*;
 
 /**
  * Console user interface.
@@ -35,7 +35,7 @@ public class ConsoleUI implements UserInterface {
     private final ScoreService scoreService = new ScoreServiceJDBC();
     private final CommentService commentService = new CommentServiceJDBC();
     private final RatingService ratingService = new RatingServiceJDBC();
-    private final String GAME_NAME = "minesweeper";
+    private final String GAME_NAME = "sk/tsystems/gamestudio";
 
     /** Input reader. */
     private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));

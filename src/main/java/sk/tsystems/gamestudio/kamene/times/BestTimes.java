@@ -1,4 +1,4 @@
-package kamene.times;
+package sk.tsystems.gamestudio.kamene.times;
 
 import java.io.*;
 import java.util.ArrayList;

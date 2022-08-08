@@ -1,8 +1,9 @@
-package kamene.test;
+package sk.tsystems.gamestudio.kamene.test;
 
-import kamene.core.Field;
+import sk.tsystems.gamestudio.kamene.core.Field;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Random;
 

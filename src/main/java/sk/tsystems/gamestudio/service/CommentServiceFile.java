@@ -1,41 +1,39 @@
 package sk.tsystems.gamestudio.service;
 
-import sk.tsystems.gamestudio.entity.Score;
+import sk.tsystems.gamestudio.entity.Comment;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ScoreServiceFile implements ScoreService {
-    private List<Score> scores = new ArrayList<>();
-    private static final String FILE = "score.bin";
+public class CommentServiceFile implements CommentService {
+    private List<Comment> comments = new ArrayList<>();
+    private static final String FILE = "comments.bin";
 
     @Override
-    public void addScore(Score score) {
-        scores = load();
-        scores.add(score);
-        save(scores);
+    public void addComment(Comment comment) {
+        comments = load();
+        comments.add(comment);
+        save(comments);
     }
 
     @Override
-    public List<Score> getBestScores(String game) {
-        scores = load();
-        return scores
+    public List<Comment> getComments(String game) {
+        return comments
                 .stream()
                 .filter(s -> s.getGame().equals(game))
-                .sorted((s1, s2) -> -Integer.compare(s1.getPoints(), s2.getPoints()))
-                .limit(5)
+                .sorted((d1, d2) -> -d1.getCommentedOn().compareTo(d2.getCommentedOn()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void reset() {
-        scores = new ArrayList<>();
-        save(scores);
+        comments = new ArrayList<>();
+        save(comments);
     }
 
-    private void save(List<Score> scoresToSave) {
+    private void save(List<Comment> scoresToSave) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE))) {
             oos.writeObject(scoresToSave);
         } catch (IOException e) {
@@ -43,9 +41,9 @@ public class ScoreServiceFile implements ScoreService {
         }
     }
 
-    private List<Score> load() {
+    private List<Comment> load() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE))) {
-            return (List<Score>) ois.readObject();
+            return (List<Comment>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new GameStudioException(e);
         }

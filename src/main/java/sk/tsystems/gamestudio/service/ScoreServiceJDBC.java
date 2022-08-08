@@ -1,6 +1,6 @@
-package service;
+package sk.tsystems.gamestudio.service;
 
-import entity.Score;
+import sk.tsystems.gamestudio.entity.Score;
 
 import java.sql.*;
 import java.util.ArrayList;

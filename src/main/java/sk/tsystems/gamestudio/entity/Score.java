@@ -1,4 +1,4 @@
-package entity;
+package sk.tsystems.gamestudio.entity;
 
 import java.io.Serializable;
 import java.util.Date;

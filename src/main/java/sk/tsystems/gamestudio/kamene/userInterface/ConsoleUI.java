@@ -1,13 +1,13 @@
-package kamene.userInterface;
+package sk.tsystems.gamestudio.kamene.userInterface;
 
-import entity.Comment;
-import entity.Rating;
-import entity.Score;
-import kamene.core.Field;
-import kamene.core.Stone;
+import sk.tsystems.gamestudio.entity.Comment;
+import sk.tsystems.gamestudio.entity.Rating;
+import sk.tsystems.gamestudio.entity.Score;
+import sk.tsystems.gamestudio.kamene.core.Field;
+import sk.tsystems.gamestudio.kamene.core.Stone;
 
-import kamene.times.*;
 import service.*;
+import sk.tsystems.gamestudio.service.*;
 
 import java.io.*;
 import java.sql.Date;
@@ -28,7 +28,7 @@ public class ConsoleUI {
     private final ScoreService scoreService = new ScoreServiceJDBC();
     private final CommentService commentService = new CommentServiceJDBC();
     private final RatingService ratingService = new RatingServiceJDBC();
-    private final String GAME_NAME = "kamene";
+    private final String GAME_NAME = "sk/tsystems/gamestudio";
 
     public void newGame(Field field) {
         this.field = field;
