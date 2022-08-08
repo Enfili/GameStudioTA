@@ -1,4 +1,4 @@
-package test;
+package sk.tsystems.gamestudio.service;
 
 import sk.tsystems.gamestudio.entity.Score;
 import org.junit.jupiter.api.Test;

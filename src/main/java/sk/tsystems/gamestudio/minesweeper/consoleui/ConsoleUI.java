@@ -15,7 +15,6 @@ import sk.tsystems.gamestudio.minesweeper.UserInterface;
 import sk.tsystems.gamestudio.minesweeper.core.Field;
 import sk.tsystems.gamestudio.minesweeper.core.GameState;
 import sk.tsystems.gamestudio.minesweeper.core.TooManyMinesException;
-import service.*;
 import sk.tsystems.gamestudio.service.*;
 
 /**
@@ -35,7 +34,7 @@ public class ConsoleUI implements UserInterface {
     private final ScoreService scoreService = new ScoreServiceJDBC();
     private final CommentService commentService = new CommentServiceJDBC();
     private final RatingService ratingService = new RatingServiceJDBC();
-    private final String GAME_NAME = "sk/tsystems/gamestudio";
+    private final String GAME_NAME = "minesweeper";
 
     /** Input reader. */
     private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));

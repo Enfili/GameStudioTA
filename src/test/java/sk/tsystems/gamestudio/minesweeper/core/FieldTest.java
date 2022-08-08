@@ -1,4 +1,4 @@
-package test;
+package sk.tsystems.gamestudio.minesweeper.core;
 
 import java.util.Random;
 

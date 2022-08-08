@@ -6,7 +6,6 @@ import sk.tsystems.gamestudio.entity.Score;
 import sk.tsystems.gamestudio.kamene.core.Field;
 import sk.tsystems.gamestudio.kamene.core.Stone;
 
-import service.*;
 import sk.tsystems.gamestudio.service.*;
 
 import java.io.*;
@@ -28,7 +27,7 @@ public class ConsoleUI {
     private final ScoreService scoreService = new ScoreServiceJDBC();
     private final CommentService commentService = new CommentServiceJDBC();
     private final RatingService ratingService = new RatingServiceJDBC();
-    private final String GAME_NAME = "sk/tsystems/gamestudio";
+    private final String GAME_NAME = "kamene";
 
     public void newGame(Field field) {
         this.field = field;
