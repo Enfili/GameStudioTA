@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import sk.tsystems.gamestudio.entity.Comment;
 import sk.tsystems.gamestudio.entity.Rating;
 import sk.tsystems.gamestudio.entity.Score;
@@ -31,7 +32,8 @@ public class ConsoleUI implements UserInterface {
     // originally in Minesweeper.java
     private long startMillis;
     private Settings setting;
-    private final ScoreService scoreService = new ScoreServiceJDBC();
+    @Autowired
+    private ScoreService scoreService;
     private final CommentService commentService = new CommentServiceJDBC();
     private final RatingService ratingService = new RatingServiceJDBC();
     private final String GAME_NAME = "minesweeper";
