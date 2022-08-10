@@ -6,7 +6,7 @@ import sk.tsystems.gamestudio.service.ScoreServiceJDBC;
 
 import java.util.Date;
 
-public class TestJDBC {
+public class PlaygroundJDBC {
 
     public static void main(String[] args) throws Exception {
         ScoreService scoreService = new ScoreServiceJDBC();

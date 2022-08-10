@@ -34,8 +34,10 @@ public class ConsoleUI implements UserInterface {
     private Settings setting;
     @Autowired
     private ScoreService scoreService;
-    private final CommentService commentService = new CommentServiceJDBC();
-    private final RatingService ratingService = new RatingServiceJDBC();
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private RatingService ratingService;
     private final String GAME_NAME = "minesweeper";
 
     /** Input reader. */

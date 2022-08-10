@@ -4,9 +4,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import sk.tsystems.gamestudio.minesweeper.PlaygroundJPA;
 import sk.tsystems.gamestudio.minesweeper.consoleui.ConsoleUI;
-import sk.tsystems.gamestudio.service.ScoreService;
-import sk.tsystems.gamestudio.service.ScoreServiceJDBC;
+import sk.tsystems.gamestudio.service.*;
 
 @SpringBootApplication
 public class SpringClient {
@@ -14,9 +14,17 @@ public class SpringClient {
         SpringApplication.run(SpringClient.class);
     }
 
+//    @Bean
+//    public CommandLineRunner runner(ConsoleUI console) {
+//        return s -> console.play();
+//    }
+
     @Bean
-    public CommandLineRunner runner(ConsoleUI console) {
-        return s -> console.play();
+    public CommandLineRunner runnerJPA(PlaygroundJPA playground) { return s -> playground.play();}
+
+    @Bean
+    public PlaygroundJPA playground() {
+        return new PlaygroundJPA();
     }
 
     @Bean
@@ -28,4 +36,11 @@ public class SpringClient {
     public ScoreService scoreService() {
         return new ScoreServiceJDBC();
     }
+
+    @Bean
+    public CommentService commentService() { return new CommentServiceJDBC(); }
+
+    @Bean
+    public RatingService ratingService() { return new RatingServiceJDBC(); }
+
 }

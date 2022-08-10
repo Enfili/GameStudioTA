@@ -1,13 +1,24 @@
 package sk.tsystems.gamestudio.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
 public class Score implements Serializable {
+
+    @Id
+    @GeneratedValue
+    private int ident;
+
     private String game;
     private String username;
     private int points;
     private Date playedOn;
+
+    public Score() {}
 
     public Score(String game, String username, int points, Date playedOn) {
         this.game = game;

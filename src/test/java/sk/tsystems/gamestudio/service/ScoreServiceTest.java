@@ -9,7 +9,7 @@ import sk.tsystems.gamestudio.service.ScoreServiceFile;
 import java.util.Date;
 
 public class ScoreServiceTest {
-    private ScoreService scoreService = new ScoreServiceFile();
+    private ScoreService scoreService = new ScoreServiceJPA();
 
     @Test
     public void testReset() {
