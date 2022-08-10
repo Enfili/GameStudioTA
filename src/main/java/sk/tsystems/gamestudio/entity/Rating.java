@@ -1,8 +1,15 @@
 package sk.tsystems.gamestudio.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 
+@Entity
 public class Rating {
+    @Id
+    @GeneratedValue
+    private int ident;
     private String game;
     private String username;
     private int rating;

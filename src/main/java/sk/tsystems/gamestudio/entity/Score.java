@@ -12,7 +12,6 @@ public class Score implements Serializable {
     @Id
     @GeneratedValue
     private int ident;
-
     private String game;
     private String username;
     private int points;
