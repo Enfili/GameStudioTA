@@ -1,5 +1,6 @@
 package sk.tsystems.gamestudio.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,8 +14,11 @@ public class Comment implements Serializable {
     private int ident;
     private String game;
     private String username;
+    @Column(length = 1000)
     private String comment;
     private Date commentedOn;
+
+    public Comment() {}
 
     public Comment(String game, String username, String comment, Date commentedOn) {
         this.game = game;

@@ -34,13 +34,13 @@ public class SpringClient {
 
     @Bean
     public ScoreService scoreService() {
-        return new ScoreServiceJDBC();
+        return new ScoreServiceJPA();
     }
 
     @Bean
-    public CommentService commentService() { return new CommentServiceJDBC(); }
+    public CommentService commentService() { return new CommentServiceJPA(); }
 
     @Bean
-    public RatingService ratingService() { return new RatingServiceJDBC(); }
+    public RatingService ratingService() { return new RatingServiceJPA(); }
 
 }
