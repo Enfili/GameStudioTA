@@ -48,17 +48,17 @@ public class PlaygroundJPA {
 //        if (entityManager
 //                .createQuery("select r from Rating r where r.game = :myGame and username = :myUsername")
 //                .setParameter("myGame", game)
-//                .setParameter("myUsername", username)
-//                .getResultList()
-//                .size() == 0) {
-//            entityManager.persist(rating);
-//        } else {
-//            entityManager
-//                    .createNativeQuery("update rating set rating = ?, rated_on = ? where game = ? and username = ?")
-//                    .setParameter(3, game)
-//                    .setParameter(4, username)
-//                    .setParameter(1, rating.getRating())
-//                    .setParameter(2, rating.getRatedOn());
+////                .setParameter("myUsername", username)
+////                .getResultList()
+////                .size() == 0) {
+////            entityManager.persist(rating);
+////        } else {
+////            entityManager
+////                    .createNativeQuery("update rating set rating = ?, rated_on = ? where game = ? and username = ?")
+////                    .setParameter(3, game)
+////                    .setParameter(4, username)
+////                    .setParameter(1, rating.getRating())
+////                    .setParameter(2, rating.getRatedOn());
 //        }
 
 //        List<Score> bestScores =
