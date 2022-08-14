@@ -32,11 +32,11 @@ public class ConsoleUI implements UserInterface {
     // originally in Minesweeper.java
     private long startMillis;
     private Settings setting;
-    @Autowired
+//    @Autowired
     private ScoreService scoreService;
-    @Autowired
+//    @Autowired
     private CommentService commentService;
-    @Autowired
+//    @Autowired
     private RatingService ratingService;
     private final String GAME_NAME = "minesweeper";
 

@@ -14,8 +14,9 @@ public class ScoreWebServiceRest {
     @Autowired
     private ScoreService scoreService;
 
+    //http://localhost:8080/api/score/minesweeper
     @GetMapping("/{game}")
-    private List<Score> getBestScores(@PathVariable String game) {
+    public List<Score> getBestScores(@PathVariable String game) {
         return scoreService.getBestScores(game);
     }
 
@@ -23,4 +24,5 @@ public class ScoreWebServiceRest {
     public void addScore(@RequestBody Score score) {
         scoreService.addScore(score);
     }
+
 }

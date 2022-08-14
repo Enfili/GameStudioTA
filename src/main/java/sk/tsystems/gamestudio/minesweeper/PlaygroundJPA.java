@@ -5,6 +5,7 @@ import sk.tsystems.gamestudio.entity.*;
 import sk.tsystems.gamestudio.minesweeper.consoleui.WrongFormatException;
 import sk.tsystems.gamestudio.service.StudentGroupService;
 import sk.tsystems.gamestudio.service.StudentService;
+import sk.tsystems.gamestudio.service.TestService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -22,12 +23,20 @@ public class PlaygroundJPA {
 //    @PersistenceContext
 //    private EntityManager entityManager;
 
-    @Autowired
+//    @Autowired
     private StudentService studentService;
-    @Autowired
+//    @Autowired
     private StudentGroupService studentGroupService;
+//    @Autowired
+    private TestService testService;
 
     public void play() {
+//        testService.addTest(new Test("minesweeper", "test1"));
+//        testService.addTest(new Test("minesweeper", "test2"));
+//        testService.addTest(new Test("kamene", "test1"));
+//        System.out.println(testService.getTests("minesweeper"));
+
+
 //        entityManager.persist(new StudyGroup("basic"));
 //        entityManager.persist(new StudyGroup("intermediate"));
 //        entityManager.persist(new StudyGroup("advanced"));
@@ -40,46 +49,46 @@ public class PlaygroundJPA {
 //        studentGroupService.addStudyGroup(new StudyGroup("intermediate"));
 //        studentGroupService.addStudyGroup(new StudyGroup("advanced"));
 
-        List<StudyGroup> studyGroups = studentGroupService.getStudyGroups();
-        int noOfStudyGroups = studyGroups.size();
-
-        String firstName = "";
-        String lastName = "";
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        while (firstName.length() <= 0 || firstName.length() > 100) {
-            System.out.println("What is your first name?");
-            try {
-                firstName = br.readLine();
-            } catch (Exception e) {
-                System.out.println("Problem with accessing the database.");
-            }
-        }
-        while (lastName.length() <= 0 || lastName.length() > 100) {
-            System.out.println("What is your last name?");
-            try {
-                lastName = br.readLine();
-            } catch (Exception e) {
-                System.out.println("Problem with accessing the database.");
-            }
-        }
-
-        int noOfGroups = studyGroups.size();
-        for (int i = 0; i < noOfGroups; i++) {
-            System.out.println(i + " " + studyGroups.get(i));
-        }
-
-        int group = -1;
-        while (group < 0 || group >= noOfStudyGroups) {
-            System.out.println("Select study group by choosing number.");
-            try {
-                group = Integer.parseInt(br.readLine().toLowerCase());
-            } catch (Exception e) {
-                System.out.println("Problem with accessing the database.");
-            }
-        }
-
-        studentService.addStudent(new Student(firstName, lastName, studyGroups.get(group)));
-        System.out.println(studentService.getStudents(studyGroups.get(group)));
+//        List<StudyGroup> studyGroups = studentGroupService.getStudyGroups();
+//        int noOfStudyGroups = studyGroups.size();
+//
+//        String firstName = "";
+//        String lastName = "";
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        while (firstName.length() <= 0 || firstName.length() > 100) {
+//            System.out.println("What is your first name?");
+//            try {
+//                firstName = br.readLine();
+//            } catch (Exception e) {
+//                System.out.println("Problem with accessing the database.");
+//            }
+//        }
+//        while (lastName.length() <= 0 || lastName.length() > 100) {
+//            System.out.println("What is your last name?");
+//            try {
+//                lastName = br.readLine();
+//            } catch (Exception e) {
+//                System.out.println("Problem with accessing the database.");
+//            }
+//        }
+//
+//        int noOfGroups = studyGroups.size();
+//        for (int i = 0; i < noOfGroups; i++) {
+//            System.out.println(i + " " + studyGroups.get(i));
+//        }
+//
+//        int group = -1;
+//        while (group < 0 || group >= noOfStudyGroups) {
+//            System.out.println("Select study group by choosing number.");
+//            try {
+//                group = Integer.parseInt(br.readLine().toLowerCase());
+//            } catch (Exception e) {
+//                System.out.println("Problem with accessing the database.");
+//            }
+//        }
+//
+//        studentService.addStudent(new Student(firstName, lastName, studyGroups.get(group)));
+//        System.out.println(studentService.getStudents(studyGroups.get(group)));
 
 //        entityManager.persist(new Student(firstName, lastName, studyGroups.get(group)));
 
