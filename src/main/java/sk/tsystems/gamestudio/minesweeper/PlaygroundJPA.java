@@ -1,23 +1,94 @@
 package sk.tsystems.gamestudio.minesweeper;
 
-import sk.tsystems.gamestudio.entity.Comment;
-import sk.tsystems.gamestudio.entity.Rating;
-import sk.tsystems.gamestudio.entity.Score;
+import org.springframework.beans.factory.annotation.Autowired;
+import sk.tsystems.gamestudio.entity.*;
+import sk.tsystems.gamestudio.minesweeper.consoleui.WrongFormatException;
+import sk.tsystems.gamestudio.service.StudentGroupService;
+import sk.tsystems.gamestudio.service.StudentService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.List;
 
-@Transactional
+//@Transactional
 public class PlaygroundJPA {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
+
+    @Autowired
+    private StudentService studentService;
+    @Autowired
+    private StudentGroupService studentGroupService;
 
     public void play() {
+//        entityManager.persist(new StudyGroup("basic"));
+//        entityManager.persist(new StudyGroup("intermediate"));
+//        entityManager.persist(new StudyGroup("advanced"));
+
+//        String firstName = "Raweel";
+//        String lastName = "Powick";
+//        int group = 1;
+
+//        studentGroupService.addStudyGroup(new StudyGroup("basic"));
+//        studentGroupService.addStudyGroup(new StudyGroup("intermediate"));
+//        studentGroupService.addStudyGroup(new StudyGroup("advanced"));
+
+        List<StudyGroup> studyGroups = studentGroupService.getStudyGroups();
+        int noOfStudyGroups = studyGroups.size();
+
+        String firstName = "";
+        String lastName = "";
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        while (firstName.length() <= 0 || firstName.length() > 100) {
+            System.out.println("What is your first name?");
+            try {
+                firstName = br.readLine();
+            } catch (Exception e) {
+                System.out.println("Problem with accessing the database.");
+            }
+        }
+        while (lastName.length() <= 0 || lastName.length() > 100) {
+            System.out.println("What is your last name?");
+            try {
+                lastName = br.readLine();
+            } catch (Exception e) {
+                System.out.println("Problem with accessing the database.");
+            }
+        }
+
+        int noOfGroups = studyGroups.size();
+        for (int i = 0; i < noOfGroups; i++) {
+            System.out.println(i + " " + studyGroups.get(i));
+        }
+
+        int group = -1;
+        while (group < 0 || group >= noOfStudyGroups) {
+            System.out.println("Select study group by choosing number.");
+            try {
+                group = Integer.parseInt(br.readLine().toLowerCase());
+            } catch (Exception e) {
+                System.out.println("Problem with accessing the database.");
+            }
+        }
+
+        studentService.addStudent(new Student(firstName, lastName, studyGroups.get(group)));
+        System.out.println(studentService.getStudents(studyGroups.get(group)));
+
+//        entityManager.persist(new Student(firstName, lastName, studyGroups.get(group)));
+
+//        List<Student> students = entityManager.createQuery("select s from Student s").getResultList();
+//        System.out.println(students);
+
+
+
+        /*
 //        entityManager.persist(new Score("minesweeper", "stefan2", 10, new Date()));
 //        entityManager.persist(new Rating("minesweeper", "stefan2", 3, new Date()));
 //        entityManager.persist(new Rating("minesweeper", "stefan2", 5, new Date()));
@@ -91,5 +162,6 @@ public class PlaygroundJPA {
 //        System.out.println("AVERAGE RATING: " + avgRating);
 //        System.out.println("RATING: " + rating);
 //        System.out.println("COMMENTS: " + comments);
+         */
     }
 }
