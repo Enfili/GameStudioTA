@@ -27,6 +27,11 @@ public class SpringClient {
     }
 
     @Bean
+    public CommandLineRunner runner(sk.tsystems.gamestudio.kamene.userInterface.ConsoleUI console) {
+        return s -> console.play();
+    }
+
+//    @Bean
     public CommandLineRunner runner(ConsoleUI console) {
         return s -> console.play();
     }
@@ -39,6 +44,11 @@ public class SpringClient {
     @Bean
     public PlaygroundJPA consoleJPA() {
         return new PlaygroundJPA();
+    }
+
+    @Bean
+    public sk.tsystems.gamestudio.kamene.userInterface.ConsoleUI kameneConsole() {
+        return new sk.tsystems.gamestudio.kamene.userInterface.ConsoleUI();
     }
 
     @Bean

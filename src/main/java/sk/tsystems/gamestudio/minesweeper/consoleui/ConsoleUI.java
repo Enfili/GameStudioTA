@@ -239,7 +239,7 @@ public class ConsoleUI implements UserInterface {
         } catch (GameStudioException e) {
             System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
         }
-        return countryService.getCountries().get(choice);
+        return countryService.getCountries().get(choice - 1);
     }
 
     private void addNewCountry() {
@@ -270,7 +270,7 @@ public class ConsoleUI implements UserInterface {
         } catch (GameStudioException e) {
             System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
         }
-        return occupationService.getOccupations().get(choice);
+        return occupationService.getOccupations().get(choice - 1);
     }
 
     private int selfEvaluate() {
@@ -283,7 +283,6 @@ public class ConsoleUI implements UserInterface {
         return selfEvaluation;
     }
 
-
     private void choosePlayer(List<Player> players) {
         int choice = 0;
         int tries = 5;
@@ -292,6 +291,7 @@ public class ConsoleUI implements UserInterface {
             int nb = 1;
             for (Player player : players) {
                 System.out.println("(" + nb + ") " + player.toString());
+                nb++;
             }
             try {
                 choice = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());

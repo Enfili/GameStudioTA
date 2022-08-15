@@ -1,8 +1,7 @@
 package sk.tsystems.gamestudio.kamene.userInterface;
 
-import sk.tsystems.gamestudio.entity.Comment;
-import sk.tsystems.gamestudio.entity.Rating;
-import sk.tsystems.gamestudio.entity.Score;
+import org.springframework.beans.factory.annotation.Autowired;
+import sk.tsystems.gamestudio.entity.*;
 import sk.tsystems.gamestudio.kamene.core.Field;
 import sk.tsystems.gamestudio.kamene.core.Stone;
 
@@ -11,6 +10,7 @@ import sk.tsystems.gamestudio.service.*;
 import java.io.*;
 import java.sql.Date;
 import java.time.Instant;
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,11 +23,69 @@ public class ConsoleUI {
     private static final Pattern INPUT = Pattern.compile("[wasd]|up|down|left|right");
     private long startTime;
 //    private BestTimes bestTimes = new BestTimes();
-
-    private final ScoreService scoreService = new ScoreServiceJDBC();
-    private final CommentService commentService = new CommentServiceJDBC();
-    private final RatingService ratingService = new RatingServiceJDBC();
     private final String GAME_NAME = "kamene";
+    private String name;
+
+    private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
+    @Autowired
+    private ScoreService scoreService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private RatingService ratingService;
+    @Autowired
+    private CountryService countryService;
+    @Autowired
+    private OccupationService occupationService;
+    @Autowired
+    private PlayerService playerService;
+
+    public void play() {
+        name = username();
+        handlePlayer(name);
+
+        do {
+            System.out.println("Do you wish to start (new) game or (load) previous one or have a look at best (times) or (comments) or average (rating) of the game or you can (exit) game?");
+            int rows = 0;
+            int columns = 0;
+            try {
+                String input = br.readLine().trim().toLowerCase();
+
+                if (input.equals("new")) {
+                    while (rows <= 0 || columns <= 0) {
+                        System.out.println("Enter number of rows: ");
+                        rows = Integer.parseInt(br.readLine());
+                        System.out.println("Enter number of columns: ");
+                        columns = Integer.parseInt(br.readLine());
+                        if (rows <= 0)
+                            System.out.println("You need to have more rows to be able to enjoy this game. Try again.");
+                        if (columns <= 0)
+                            System.out.println("You need to have more columns to be able to enjoy this game. Try again.");
+                    }
+                    field = new Field(rows, columns);
+                    this.newGame(field);
+                } else if (input.equals("load")) {
+                    this.newGame();
+                } else if (input.equals("times")) {
+                    scoreService.getBestScores(GAME_NAME).forEach(n -> System.out.println(n.getGame() + " " + n.getUsername() + " " + n.getPoints() + " " + n.getPlayedOn()));
+//                    BestTimes bt = new BestTimes();
+//                    bt.loadTimes();
+//                    System.out.println(bt);
+                } else if (input.equals("comments")) {
+                    commentService.getComments(GAME_NAME).forEach(n -> System.out.println(n.getCommentedOn() + ": " + n.getComment() + "\n" + n.getUsername()));
+                } else if (input.equals("rating")) {
+                    System.out.printf("Average rating of the game is: %d%n", ratingService.getAverageRating(GAME_NAME));
+                } else if (input.equals("exit")) {
+                    System.exit(0);
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            } catch (GameStudioException e) {
+                System.out.println("Unable to access database! (" + e.getMessage() + ")");
+            }
+        }while (true);
+    }
 
     public void newGame(Field field) {
         this.field = field;
@@ -80,7 +138,6 @@ public class ConsoleUI {
         System.out.println("Congratulations. YOU ARE A WINNER!");
         int gameTime = (int) (System.currentTimeMillis() - startTime) / 1000;
         System.out.printf("It took you %d seconds to conquer this puzzle!%n", gameTime);
-        String name = username();
         try {
             scoreService.addScore(new Score(GAME_NAME, name, gameTime, Date.from(Instant.now())));
         } catch (GameStudioException e) {
@@ -115,6 +172,143 @@ public class ConsoleUI {
                 System.out.println("Unable to access database! (" + e.getMessage() + ")");
             }
         } while(true);
+    }
+
+    private String readLine() {
+        try {
+            return input.readLine();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    private void handlePlayer(String playerName) {
+        try {
+            List<Player> players = playerService.getPlayersByUserName(playerName);
+            if (players.size() != 0) {
+                for (Player player : players) {
+                    System.out.println(player.toString());
+                }
+                System.out.println("Môžeš si vybrať zo zoznamu hráčov (1) alebo pridať nového hráča (2).");
+                int choice = Integer.parseInt(readLine());
+                if (choice == 1)
+                    choosePlayer(players);
+                else if (choice == 2)
+                    addPlayerToDatabase(playerName);
+            } else {
+                addPlayerToDatabase(playerName);
+            }
+        } catch (GameStudioException e) {
+            System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
+        }
+    }
+
+    private void addPlayerToDatabase(String username) {
+        System.out.println("Pridaj nového používateľa.");
+        try {
+            System.out.println("Aké je tvoje celé meno?");
+            String fullName = readLine();
+            int selfEvaluation = selfEvaluate();
+            Country country = chooseCountry();
+            Occupation occupation = chooseOccupation();
+            Player player = new Player(username, fullName, selfEvaluation, country, occupation);
+            playerService.addPlayer(player);
+            System.out.println("Nový hráč pridaný: ");
+            System.out.println(player);
+        } catch (GameStudioException e) {
+            System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
+        }
+    }
+
+    private Country chooseCountry() {
+        System.out.println("V akej krajine žiješ?");
+        List<Country> countries = countryService.getCountries();
+        int choice = 0;
+        try {
+            int tries = 5;
+            while((choice < 1 || choice > countries.size()) && tries > 0) {
+                System.out.println("Vyber si krajinu zo zoznamu. Ak sa tvoja krajina nenachádza v zozname, tak pridaj novú (0). Máš " + tries + "pokusov.");
+                int nb = 1;
+                for (Country country : countries) {
+                    System.out.println("(" + nb + ")" + country.toString());
+                    nb++;
+                }
+                try {
+                    choice = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+                    tries--;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                if (choice == 0) {
+                    addNewCountry();
+                    choice = countries.size();
+                    break;
+                }
+            }
+        } catch (GameStudioException e) {
+            System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
+        }
+        return countryService.getCountries().get(choice - 1);
+    }
+
+    private void addNewCountry() {
+        System.out.println("Zadaj názov krajiny, v ktorej žiješ.");
+        countryService.addCountry(new Country(readLine()));
+    }
+
+    private Occupation chooseOccupation() {
+        System.out.println("Aké je tvoje povolanie. Vyber si z ponuky.");
+        List<Occupation> occupationList = occupationService.getOccupations();
+        int choice = 0;
+        try {
+            int tries = 5;
+            while((choice < 1 || choice > occupationList.size()) && tries > 0) {
+                System.out.println("Vyber si povolanie zo zoznamu. Zostáva ti " + tries + "pokusov.");
+                int nb = 1;
+                for (Occupation occupation : occupationList) {
+                    System.out.println("(" + nb + ")" + occupation.toString());
+                    nb++;
+                }
+                try {
+                    choice = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+                    tries--;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (GameStudioException e) {
+            System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
+        }
+        return occupationService.getOccupations().get(choice - 1);
+    }
+
+    private int selfEvaluate() {
+        int selfEvaluation = 0;
+        int tries = 5;
+        System.out.println("Ako by si sa sám ohodnotil? (Od 1 po 10.)");
+        while ((selfEvaluation < 1 || selfEvaluation > 10) && tries > 0) {
+            selfEvaluation = Integer.parseInt(readLine());
+        }
+        return selfEvaluation;
+    }
+
+    private void choosePlayer(List<Player> players) {
+        int choice = 0;
+        int tries = 5;
+        while((choice < 1 || choice > players.size()) && tries > 0) {
+            System.out.println("Vyber si hráča zo zoznamu. Máš " + tries + "pokusov.");
+            int nb = 1;
+            for (Player player : players) {
+                System.out.println("(" + nb + ") " + player.toString());
+                nb++;
+            }
+            try {
+                choice = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+                tries--;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private String username() {
