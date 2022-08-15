@@ -1,21 +1,12 @@
 package sk.tsystems.gamestudio.minesweeper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import sk.tsystems.gamestudio.entity.*;
-import sk.tsystems.gamestudio.minesweeper.consoleui.WrongFormatException;
+import sk.tsystems.gamestudio.entity.Country;
+import sk.tsystems.gamestudio.entity.Occupation;
+import sk.tsystems.gamestudio.service.CountryService;
+import sk.tsystems.gamestudio.service.OccupationService;
 import sk.tsystems.gamestudio.service.StudentGroupService;
 import sk.tsystems.gamestudio.service.StudentService;
-import sk.tsystems.gamestudio.service.TestService;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Date;
-import java.util.List;
 
 //@Transactional
 public class PlaygroundJPA {
@@ -27,10 +18,25 @@ public class PlaygroundJPA {
     private StudentService studentService;
 //    @Autowired
     private StudentGroupService studentGroupService;
-//    @Autowired
-    private TestService testService;
+    @Autowired
+    private CountryService countryService;
+    @Autowired
+    private OccupationService occupationService;
 
     public void play() {
+
+        countryService.addCountry(new Country("Slovensko"));
+        countryService.addCountry(new Country("Cesko"));
+
+        System.out.println(countryService.getCountries());
+
+        occupationService.addOccupation(new Occupation("student"));
+        occupationService.addOccupation(new Occupation("ziak"));
+        occupationService.addOccupation(new Occupation("skolkar"));
+
+        System.out.println(occupationService.getOccupations());
+
+
 //        testService.addTest(new Test("minesweeper", "test1"));
 //        testService.addTest(new Test("minesweeper", "test2"));
 //        testService.addTest(new Test("kamene", "test1"));

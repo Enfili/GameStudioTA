@@ -11,21 +11,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.web.client.RestTemplate;
 import sk.tsystems.gamestudio.entity.Comment;
+import sk.tsystems.gamestudio.entity.Country;
 import sk.tsystems.gamestudio.minesweeper.PlaygroundJPA;
 import sk.tsystems.gamestudio.minesweeper.consoleui.ConsoleUI;
 import sk.tsystems.gamestudio.service.*;
 
 @SpringBootApplication
-@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
-        pattern = "sk.tsystems .gamestudio.server.*"))
+//@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
+//        pattern = "sk.tsystems .gamestudio.server.*"))
 public class SpringClient {
 
     public static void main(String[] args) {
-//        SpringApplication.run(SpringClient.class);
-        new SpringApplicationBuilder(SpringClient.class).web(WebApplicationType.NONE).run(args);
+        SpringApplication.run(SpringClient.class);
+//        new SpringApplicationBuilder(SpringClient.class).web(WebApplicationType.NONE).run(args);
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner runner(ConsoleUI console) {
         return s -> console.play();
     }
@@ -46,20 +47,32 @@ public class SpringClient {
     }
 
     @Bean
+    public CountryService countryService() {
+        return new CountryServiceJPA();
+    }
+
+    @Bean
+    public OccupationService occupationService() {
+        return new OccupationServiceJPA();
+    }
+
+    @Bean
     public ScoreService scoreService() {
-        return new ScoreServiceRest();
-//        return new ScoreServiceJPA();
+//        return new ScoreServiceRest();
+        return new ScoreServiceJPA();
         //return new ScoreServiceJDBC();
     }
 
     @Bean
     public CommentService commentService() {
-        return new CommentServiceRest();
+        return new CommentServiceJPA();
+//        return new CommentServiceRest();
     }
 
     @Bean
     public RatingService ratingService() {
-        return new RatingServiceRest();
+        return new RatingServiceJPA();
+//        return new RatingServiceRest();
     }
 
     @Bean
