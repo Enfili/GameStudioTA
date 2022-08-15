@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"game", "username"})})
+@Table(uniqueConstraints={@UniqueConstraint(name = "UniqueGameAndUsername", columnNames = {"game", "username"})})
 public class Rating {
     @Id
     @GeneratedValue

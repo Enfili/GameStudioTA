@@ -3,10 +3,8 @@ package sk.tsystems.gamestudio.minesweeper;
 import org.springframework.beans.factory.annotation.Autowired;
 import sk.tsystems.gamestudio.entity.Country;
 import sk.tsystems.gamestudio.entity.Occupation;
-import sk.tsystems.gamestudio.service.CountryService;
-import sk.tsystems.gamestudio.service.OccupationService;
-import sk.tsystems.gamestudio.service.StudentGroupService;
-import sk.tsystems.gamestudio.service.StudentService;
+import sk.tsystems.gamestudio.entity.Player;
+import sk.tsystems.gamestudio.service.*;
 
 //@Transactional
 public class PlaygroundJPA {
@@ -22,19 +20,32 @@ public class PlaygroundJPA {
     private CountryService countryService;
     @Autowired
     private OccupationService occupationService;
+    @Autowired
+    private PlayerService playerService;
 
     public void play() {
 
-        countryService.addCountry(new Country("Slovensko"));
-        countryService.addCountry(new Country("Cesko"));
+//        countryService.addCountry(new Country("Slovensko"));
+//        countryService.addCountry(new Country("Cesko"));
 
-        System.out.println(countryService.getCountries());
+//        System.out.println(countryService.getCountries());
 
-        occupationService.addOccupation(new Occupation("student"));
-        occupationService.addOccupation(new Occupation("ziak"));
-        occupationService.addOccupation(new Occupation("skolkar"));
+//        occupationService.addOccupation(new Occupation("student"));
+//        occupationService.addOccupation(new Occupation("ziak"));
+//        occupationService.addOccupation(new Occupation("skolkar"));
+//        occupationService.addOccupation(new Occupation("zamestnanec"));
+//        occupationService.addOccupation(new Occupation("zivnostnik"));
+//        occupationService.addOccupation(new Occupation("nezamestnany"));
+//        occupationService.addOccupation(new Occupation("dochodca"));
+//        occupationService.addOccupation(new Occupation("invalid"));
 
-        System.out.println(occupationService.getOccupations());
+        playerService.addPlayer(new Player("Stefan", "Stefan Korecko", 3, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
+        playerService.addPlayer(new Player("Jaroslav", "Jaroslav Pavlicko", 5, countryService.getCountries().get(1), occupationService.getOccupations().get(2)));
+        playerService.addPlayer(new Player("Martin", "Martin Petruska", 9, countryService.getCountries().get(1), occupationService.getOccupations().get(3)));
+        playerService.addPlayer(new Player("Peter", "Peter Zivcak", 1, countryService.getCountries().get(1), occupationService.getOccupations().get(4)));
+
+
+//        System.out.println(occupationService.getOccupations());
 
 
 //        testService.addTest(new Test("minesweeper", "test1"));

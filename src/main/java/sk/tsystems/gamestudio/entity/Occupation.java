@@ -1,9 +1,7 @@
 package sk.tsystems.gamestudio.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Occupation {
@@ -14,6 +12,9 @@ public class Occupation {
 
     @Column(length = 32, nullable = false, unique = true)
     private String Occupation;
+
+    @OneToMany(mappedBy = "ident")
+    private List<Player> players;
 
     public Occupation() {
     }
