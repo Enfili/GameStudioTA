@@ -25,10 +25,7 @@ public class Occupation {
 
     @Override
     public String toString() {
-        return "Occupation{" +
-                "ident=" + ident +
-                ", Occupation='" + Occupation + '\'' +
-                '}';
+        return "Occupation: " + Occupation;
     }
 
     public String getOccupation() {

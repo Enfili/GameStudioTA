@@ -39,11 +39,14 @@ public class PlaygroundJPA {
 //        occupationService.addOccupation(new Occupation("dochodca"));
 //        occupationService.addOccupation(new Occupation("invalid"));
 
-        playerService.addPlayer(new Player("Stefan", "Stefan Korecko", 3, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
-        playerService.addPlayer(new Player("Jaroslav", "Jaroslav Pavlicko", 5, countryService.getCountries().get(1), occupationService.getOccupations().get(2)));
-        playerService.addPlayer(new Player("Martin", "Martin Petruska", 9, countryService.getCountries().get(1), occupationService.getOccupations().get(3)));
-        playerService.addPlayer(new Player("Peter", "Peter Zivcak", 1, countryService.getCountries().get(1), occupationService.getOccupations().get(4)));
+//        playerService.addPlayer(new Player("Stefan", "Stefan Korecko", 3, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
+//        playerService.addPlayer(new Player("Stefan", "Stefan Korenko", 4, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
+//        playerService.addPlayer(new Player("Jaroslav", "Jaroslav Pavlicko", 5, countryService.getCountries().get(1), occupationService.getOccupations().get(2)));
+//        playerService.addPlayer(new Player("Martin", "Martin Petruska", 9, countryService.getCountries().get(1), occupationService.getOccupations().get(3)));
+//        playerService.addPlayer(new Player("Peter", "Peter Zivcak", 1, countryService.getCountries().get(1), occupationService.getOccupations().get(4)));
 
+//        System.out.println(playerService.getPlayersByUserName("Stefan"));
+//        System.out.println(playerService.getPlayersByUserName("Stefan2"));
 
 //        System.out.println(occupationService.getOccupations());
 

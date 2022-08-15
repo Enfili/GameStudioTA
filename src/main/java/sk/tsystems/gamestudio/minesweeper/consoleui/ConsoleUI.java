@@ -5,13 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Date;
 import java.time.Instant;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import sk.tsystems.gamestudio.entity.Comment;
-import sk.tsystems.gamestudio.entity.Rating;
-import sk.tsystems.gamestudio.entity.Score;
+import sk.tsystems.gamestudio.entity.*;
 import sk.tsystems.gamestudio.minesweeper.UserInterface;
 import sk.tsystems.gamestudio.minesweeper.core.Field;
 import sk.tsystems.gamestudio.minesweeper.core.GameState;
@@ -32,12 +31,19 @@ public class ConsoleUI implements UserInterface {
     // originally in Minesweeper.java
     private long startMillis;
     private Settings setting;
-//    @Autowired
+    @Autowired
     private ScoreService scoreService;
-//    @Autowired
+    @Autowired
     private CommentService commentService;
-//    @Autowired
+    @Autowired
     private RatingService ratingService;
+    @Autowired
+    private CountryService countryService;
+    @Autowired
+    private OccupationService occupationService;
+    @Autowired
+    private PlayerService playerService;
+
     private final String GAME_NAME = "minesweeper";
 
     /** Input reader. */
@@ -139,6 +145,7 @@ public class ConsoleUI implements UserInterface {
     @Override
     public void play() throws TooManyMinesException {
         String playerName = username();
+        handlePlayer(playerName);
 
         setting = Settings.load();
         Field field = null;
@@ -164,6 +171,135 @@ public class ConsoleUI implements UserInterface {
 
         handleComments(playerName);
         handleRating(playerName);
+    }
+
+    private void handlePlayer(String playerName) {
+        try {
+            List<Player> players = playerService.getPlayersByUserName(playerName);
+            if (players.size() != 0) {
+                for (Player player : players) {
+                    System.out.println(player.toString());
+                }
+                System.out.println("Môžeš si vybrať zo zoznamu hráčov (1) alebo pridať nového hráča (2).");
+                int choice = Integer.parseInt(readLine());
+                if (choice == 1)
+                    choosePlayer(players);
+                else if (choice == 2)
+                    addPlayerToDatabase(playerName);
+            } else {
+                addPlayerToDatabase(playerName);
+            }
+        } catch (GameStudioException e) {
+            System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
+        }
+    }
+
+    private void addPlayerToDatabase(String username) {
+        System.out.println("Pridaj nového používateľa.");
+        try {
+            System.out.println("Aké je tvoje celé meno?");
+            String fullName = readLine();
+            int selfEvaluation = selfEvaluate();
+            Country country = chooseCountry();
+            Occupation occupation = chooseOccupation();
+            Player player = new Player(username, fullName, selfEvaluation, country, occupation);
+            playerService.addPlayer(player);
+            System.out.println("Nový hráč pridaný: ");
+            System.out.println(player);
+        } catch (GameStudioException e) {
+            System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
+        }
+    }
+
+    private Country chooseCountry() {
+        System.out.println("V akej krajine žiješ?");
+        List<Country> countries = countryService.getCountries();
+        int choice = 0;
+        try {
+            int tries = 5;
+            while((choice < 1 || choice > countries.size()) && tries > 0) {
+                System.out.println("Vyber si krajinu zo zoznamu. Ak sa tvoja krajina nenachádza v zozname, tak pridaj novú (0). Máš " + tries + "pokusov.");
+                int nb = 1;
+                for (Country country : countries) {
+                    System.out.println("(" + nb + ")" + country.toString());
+                    nb++;
+                }
+                try {
+                    choice = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+                    tries--;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                if (choice == 0) {
+                    addNewCountry();
+                    choice = countries.size();
+                    break;
+                }
+            }
+        } catch (GameStudioException e) {
+            System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
+        }
+        return countryService.getCountries().get(choice);
+    }
+
+    private void addNewCountry() {
+        System.out.println("Zadaj názov krajiny, v ktorej žiješ.");
+        countryService.addCountry(new Country(readLine()));
+    }
+
+    private Occupation chooseOccupation() {
+        System.out.println("Aké je tvoje povolanie. Vyber si z ponuky.");
+        List<Occupation> occupationList = occupationService.getOccupations();
+        int choice = 0;
+        try {
+            int tries = 5;
+            while((choice < 1 || choice > occupationList.size()) && tries > 0) {
+                System.out.println("Vyber si povolanie zo zoznamu. Zostáva ti " + tries + "pokusov.");
+                int nb = 1;
+                for (Occupation occupation : occupationList) {
+                    System.out.println("(" + nb + ")" + occupation.toString());
+                    nb++;
+                }
+                try {
+                    choice = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+                    tries--;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (GameStudioException e) {
+            System.out.println("Chyba nastala pri práci s databázou. (" + e.getMessage() + ")");
+        }
+        return occupationService.getOccupations().get(choice);
+    }
+
+    private int selfEvaluate() {
+        int selfEvaluation = 0;
+        int tries = 5;
+        System.out.println("Ako by si sa sám ohodnotil? (Od 1 po 10.)");
+        while ((selfEvaluation < 1 || selfEvaluation > 10) && tries > 0) {
+            selfEvaluation = Integer.parseInt(readLine());
+        }
+        return selfEvaluation;
+    }
+
+
+    private void choosePlayer(List<Player> players) {
+        int choice = 0;
+        int tries = 5;
+        while((choice < 1 || choice > players.size()) && tries > 0) {
+            System.out.println("Vyber si hráča zo zoznamu. Máš " + tries + "pokusov.");
+            int nb = 1;
+            for (Player player : players) {
+                System.out.println("(" + nb + ") " + player.toString());
+            }
+            try {
+                choice = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+                tries--;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private String username() {

@@ -40,14 +40,11 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
-                "ident=" + ident +
-                ", userName='" + userName + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", selfEvaluation=" + selfEvaluation +
-                ", country=" + country +
-                ", occupation=" + occupation +
-                '}';
+        return "Username: " + userName + '\'' +
+                ", fullName " + fullName + '\'' +
+                ", selfEvaluation " + selfEvaluation +
+                ", " + country +
+                ", " + occupation;
     }
 
     public String getUserName() {

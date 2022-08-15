@@ -25,10 +25,7 @@ public class Country {
 
     @Override
     public String toString() {
-        return "Country{" +
-                "ident=" + ident +
-                ", Country='" + Country + '\'' +
-                '}';
+        return "Country: " + Country;
     }
 
     public String getCountry() {
