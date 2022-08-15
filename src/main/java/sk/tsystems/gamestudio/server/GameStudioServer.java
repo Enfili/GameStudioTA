@@ -23,19 +23,19 @@ public class GameStudioServer {
         SpringApplication.run(GameStudioServer.class);
     }
 
-//    @Bean
+    @Bean
     public ScoreService scoreService() {
 //        return new ScoreServiceRest();
         return new ScoreServiceJPA();
         //return new ScoreServiceJDBC();
     }
 
-//    @Bean
+    @Bean
     public CommentService commentService() {
         return new CommentServiceJPA();
     }
 
-//    @Bean
+    @Bean
     public RatingService ratingService() {
         return new RatingServiceJPA();
     }

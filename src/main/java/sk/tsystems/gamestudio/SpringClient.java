@@ -17,16 +17,16 @@ import sk.tsystems.gamestudio.minesweeper.consoleui.ConsoleUI;
 import sk.tsystems.gamestudio.service.*;
 
 @SpringBootApplication
-//@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
-//        pattern = "sk.tsystems .gamestudio.server.*"))
+@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
+        pattern = "sk.tsystems.gamestudio.server.*"))
 public class SpringClient {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringClient.class);
-//        new SpringApplicationBuilder(SpringClient.class).web(WebApplicationType.NONE).run(args);
+//        SpringApplication.run(SpringClient.class);
+        new SpringApplicationBuilder(SpringClient.class).web(WebApplicationType.NONE).run(args);
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner runner(sk.tsystems.gamestudio.kamene.userInterface.ConsoleUI console) {
         return s -> console.play();
     }
@@ -36,7 +36,7 @@ public class SpringClient {
         return s -> console.play();
     }
 
-//    @Bean
+    @Bean
     public CommandLineRunner runnerJPA(PlaygroundJPA console) {
         return s -> console.play();
     }
@@ -73,21 +73,21 @@ public class SpringClient {
 
     @Bean
     public ScoreService scoreService() {
-//        return new ScoreServiceRest();
-        return new ScoreServiceJPA();
+        return new ScoreServiceRest();
+//        return new ScoreServiceJPA();
         //return new ScoreServiceJDBC();
     }
 
     @Bean
     public CommentService commentService() {
-        return new CommentServiceJPA();
-//        return new CommentServiceRest();
+//        return new CommentServiceJPA();
+        return new CommentServiceRest();
     }
 
     @Bean
     public RatingService ratingService() {
-        return new RatingServiceJPA();
-//        return new RatingServiceRest();
+//        return new RatingServiceJPA();
+        return new RatingServiceRest();
     }
 
     @Bean

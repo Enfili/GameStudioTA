@@ -1,10 +1,10 @@
 package sk.tsystems.gamestudio.minesweeper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import sk.tsystems.gamestudio.entity.Country;
-import sk.tsystems.gamestudio.entity.Occupation;
-import sk.tsystems.gamestudio.entity.Player;
+import sk.tsystems.gamestudio.entity.*;
 import sk.tsystems.gamestudio.service.*;
+
+import java.util.Date;
 
 //@Transactional
 public class PlaygroundJPA {
@@ -16,14 +16,26 @@ public class PlaygroundJPA {
     private StudentService studentService;
 //    @Autowired
     private StudentGroupService studentGroupService;
-    @Autowired
+//    @Autowired
     private CountryService countryService;
-    @Autowired
+//    @Autowired
     private OccupationService occupationService;
-    @Autowired
+//    @Autowired
     private PlayerService playerService;
+    @Autowired
+    private ScoreService scoreService;
+    @Autowired
+    private RatingService ratingService;
 
     public void play() {
+
+//        scoreService.addScore(new Score("minesweeper", "janko", 1000, new Date()));
+//        System.out.println(scoreService.getBestScores("minesweeper"));
+
+        ratingService.setRating(new Rating("minesweeper", "janko", 1, new Date()));
+        ratingService.getRating("minesweeper", "janko");
+
+//        scoreService.addScore(new Score("kamene", "Stefan", 100, new Date()));
 
 //        countryService.addCountry(new Country("Slovensko"));
 //        countryService.addCountry(new Country("Cesko"));
@@ -49,6 +61,10 @@ public class PlaygroundJPA {
 //        System.out.println(playerService.getPlayersByUserName("Stefan2"));
 
 //        System.out.println(occupationService.getOccupations());
+
+    }
+}
+
 
 
 //        testService.addTest(new Test("minesweeper", "test1"));
@@ -192,5 +208,3 @@ public class PlaygroundJPA {
 //        System.out.println("RATING: " + rating);
 //        System.out.println("COMMENTS: " + comments);
          */
-    }
-}

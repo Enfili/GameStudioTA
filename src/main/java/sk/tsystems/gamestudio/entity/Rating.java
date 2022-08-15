@@ -5,11 +5,12 @@ import org.hibernate.annotations.Check;
 import javax.persistence.*;
 //import javax.validation.constraints.Max;
 //import javax.validation.constraints.Min;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(uniqueConstraints={@UniqueConstraint(name = "UniqueGameAndUsername", columnNames = {"game", "username"})})
-public class Rating {
+public class Rating implements Serializable {
     @Id
     @GeneratedValue
     private int ident;
@@ -30,6 +31,10 @@ public class Rating {
     private Date ratedOn;
 
     public Rating() {}
+
+    public void Rating(int rating) {
+        this.rating = rating;
+    }
 
     public Rating(String game, String username, int rating, Date ratedOn) {
         this.game = game;
