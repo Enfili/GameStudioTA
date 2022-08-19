@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="sk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Stefan Korecko" />
+    <link rel="stylesheet"
+          href="/css/mines.css"
+          media="screen" />
+
+    <title>GameStudio - Minesweeper</title>
+</head>
+
+<body>
+
+    <h2>Minesweeper</h2>
+
+<!--    <div th:text="${1+2}"></div>-->
+<!--    <div th:text="${@minesweeperController.getCurrTime()}"></div>-->
+<!--    <div th:text="${@minesweeperController.currTime}"></div>-->
+
+    <div class="minesControl">
+        <a class="abutton" href="/minesweeper/new">Nova hra</a>
+        <span th:if="${@minesweeperController.marking}">
+            Prave oznacujes
+            <a href="/minesweeper/mark">Zmen na otvaranie</a>
+        </span>
+        <span th:if="not ${@minesweeperController.marking}">
+            Prave otvaras
+            <a class="abutton" href="/minesweeper/mark">Zmen na oznacovanie</a>
+        </span>
+
+    </div>
+
+    <div th:utext="${@minesweeperController.getFieldAsHtml()}"></div>
+
+</body>
+</html>

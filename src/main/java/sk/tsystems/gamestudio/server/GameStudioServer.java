@@ -33,6 +33,7 @@ public class GameStudioServer {
     @Bean
     public CommentService commentService() {
         return new CommentServiceJPA();
+//        return new CommentServiceJPA();
     }
 
     @Bean

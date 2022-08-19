@@ -27,7 +27,7 @@ public class RatingServiceJPA implements RatingService{
             ratingToWrite.setRating(rating.getRating());
             ratingToWrite.setRatedOn(rating.getRatedOn());
         } catch (NoResultException e) {
-            entityManager.persist(new Rating(rating.getGame(), rating.getUsername(), rating.getRating(), rating.getRatedOn()));
+            entityManager.persist(rating);
         }
     }
 

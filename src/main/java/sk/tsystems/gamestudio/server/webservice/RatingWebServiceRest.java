@@ -14,7 +14,6 @@ public class RatingWebServiceRest {
     @Autowired
     RatingService ratingService;
 
-//    @GetMapping
     @PostMapping
     public void setRating(@RequestBody Rating rating) {
         ratingService.setRating(rating);

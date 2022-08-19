@@ -12,28 +12,30 @@ public class PlaygroundJPA {
 //    @PersistenceContext
 //    private EntityManager entityManager;
 
-//    @Autowired
+    @Autowired
     private StudentService studentService;
-//    @Autowired
+    @Autowired
     private StudentGroupService studentGroupService;
-//    @Autowired
+    @Autowired
     private CountryService countryService;
-//    @Autowired
+    @Autowired
     private OccupationService occupationService;
-//    @Autowired
+    @Autowired
     private PlayerService playerService;
     @Autowired
     private ScoreService scoreService;
     @Autowired
     private RatingService ratingService;
+    @Autowired
+    private CommentService commentService;
 
     public void play() {
 
 //        scoreService.addScore(new Score("minesweeper", "janko", 1000, new Date()));
 //        System.out.println(scoreService.getBestScores("minesweeper"));
 
-        ratingService.setRating(new Rating("minesweeper", "janko", 1, new Date()));
-        ratingService.getRating("minesweeper", "janko");
+//        ratingService.setRating(new Rating("minesweeper", "janko", 1, new Date()));
+//        ratingService.getRating("minesweeper", "janko");
 
 //        scoreService.addScore(new Score("kamene", "Stefan", 100, new Date()));
 

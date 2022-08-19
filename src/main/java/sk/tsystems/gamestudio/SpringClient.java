@@ -14,6 +14,7 @@ import sk.tsystems.gamestudio.entity.Comment;
 import sk.tsystems.gamestudio.entity.Country;
 import sk.tsystems.gamestudio.minesweeper.PlaygroundJPA;
 import sk.tsystems.gamestudio.minesweeper.consoleui.ConsoleUI;
+import sk.tsystems.gamestudio.server.GameStudioServer;
 import sk.tsystems.gamestudio.service.*;
 
 @SpringBootApplication
