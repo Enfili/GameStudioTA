@@ -1,16 +1,15 @@
 package sk.tsystems.gamestudio.server.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
-import sk.tsystems.gamestudio.minesweeper.core.Clue;
-import sk.tsystems.gamestudio.minesweeper.core.Field;
-import sk.tsystems.gamestudio.minesweeper.core.Tile;
-import sk.tsystems.gamestudio.minesweeper.core.TooManyMinesException;
+import sk.tsystems.gamestudio.entity.Score;
+import sk.tsystems.gamestudio.minesweeper.core.*;
+import sk.tsystems.gamestudio.service.ScoreService;
 
 import java.util.Date;
 
@@ -19,9 +18,19 @@ import java.util.Date;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class MinesweeperController {
 
-    private Field field = new Field(9,9,10);
+    private Field field = new Field(9,9,0);
 
     private boolean marking = false;
+    private boolean play = true;
+    private boolean won = false;
+    private boolean lost = false;
+
+    private String GAME = "minesweeper";
+    private long startTime;
+    private int score;
+
+    @Autowired
+    private ScoreService scoreService;
 
     public MinesweeperController() throws TooManyMinesException {
     }
@@ -29,14 +38,25 @@ public class MinesweeperController {
     @RequestMapping
     public String minesweeper(@RequestParam(required = false) Integer row, @RequestParam(required = false)Integer column,
                               Model model){
-
         if(row != null && column != null){
 
-            if(marking){
+            if (marking) {
                 field.markTile(row,column);
-            }else{
+            } else {
                 field.openTile(row,column);
             }
+
+            if (!field.getState().equals(GameState.PLAYING)) {
+                if (field.getState().equals(GameState.SOLVED)) {
+                    System.out.println(System.currentTimeMillis());
+                    System.out.println(startTime);
+                    score = field.getRowCount() * field.getColumnCount() * 10 - (int) (System.currentTimeMillis() - startTime);
+                    scoreService.addScore(new Score(GAME, "anonym", score, new Date()));
+                }
+                play = false;
+            }
+        } else {
+            startTime = System.currentTimeMillis();
         }
 
         prepareModel(model);
@@ -44,14 +64,19 @@ public class MinesweeperController {
     }
 
     @RequestMapping("/mark")
-    public String changeMarking(){
+    public String changeMarking(Model model){
         marking = !marking;
+        prepareModel(model);
         return "minesweeper";
     }
 
     @RequestMapping("/new")
-    public String newGame() throws TooManyMinesException {
+    public String newGame(Model model) throws TooManyMinesException {
         field = new Field(9,9,10);
+        play = true;
+        won = false;
+        lost = false;
+        prepareModel(model);
         return "minesweeper";
     }
 
@@ -61,6 +86,19 @@ public class MinesweeperController {
 
     public boolean getMarking(){
         return marking;
+    }
+
+    public boolean isPlay() {
+        System.out.println(play);
+        return play;
+    }
+
+    public boolean isWon() {
+        return won;
+    }
+
+    public boolean isLost() {
+        return lost;
     }
 
     public String getFieldAsHtml(){
@@ -120,7 +158,15 @@ public class MinesweeperController {
     }
 
     private void prepareModel(Model model) {
-        model.addAttribute("message", "Sprava z modelu.");
         model.addAttribute("minesweeperField", field.getTiles());
+
+        model.addAttribute("bestScores", scoreService.getBestScores(GAME));
+
+        if (field.getState().equals(GameState.PLAYING))
+            model.addAttribute("gameState", "Hrá sa.");
+        else if (field.getState().equals(GameState.SOLVED)) {
+            model.addAttribute("gameState", "Vyhral si. Tvoje skóre je: " + score);
+        } else
+            model.addAttribute("gameState", "Prehral si.");
     }
 }

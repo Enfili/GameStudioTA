@@ -25,24 +25,55 @@
             Prave otvaras
             <a class="abutton" href="/minesweeper/mark">Zmen na oznacovanie</a>
         </span>
-
     </div>
 
-    <div th:utext="${@minesweeperController.getFieldAsHtml()}"></div>
+    <div class="gameState">
+        <aside th:text="${gameState}"></aside>
+    </div>
+
+<!--    <div th:utext="${@minesweeperController.getFieldAsHtml()}"></div>-->
 
     <div>
-        <table class='minefield'>
-            <tr th:each="row: ${minesweeperField}" th:attr="class=${@minesweeperController.getTileClass(tile)}">
-                <td th:each="tile: ${row}">
-                    <a href="">
+        <span th:if="${@minesweeperController.play}">
+            <table class='minefield'>
+                <tr th:each="row: ${minesweeperField}">
+                    <td th:each="tile: ${row}"
+                        th:attr="class=${@minesweeperController.getTileClass(tile)}">
+                            <a th:attr="href='/minesweeper/?row='+${rowStat.index}+'&column='+${tileStat.index}">
+                                <span th:text="${@minesweeperController.getTileText(tile)}"></span>
+                            </a>
+                    </td>
+                </tr>
+            </table>
+        </span>
+         <span th:if="not ${@minesweeperController.play}">
+             <table class='minefield'>
+                <tr th:each="row: ${minesweeperField}">
+                    <td th:each="tile: ${row}"
+                        th:attr="class=${@minesweeperController.getTileClass(tile)}">
                         <span th:text="${@minesweeperController.getTileText(tile)}"></span>
-                    </a>
-                </td>
+                    </td>
+                </tr>
+             </table>
+         </span>
+    </div>
+
+    <div>
+        <table class="bestScores">
+            <tr>
+                <th>Meno</th>
+                <th>Body</th>
+                <th>Dátum</th>
+            </tr>
+            <tr th:each="score: ${bestScores}">
+                <td th:text="${score.getUsername}"></td>
+                <td th:text="${score.getPoints}"></td>
+                <td th:text="${score.getPlayedOn}"></td>
             </tr>
         </table>
     </div>
 
-    <aside th:text="${message}"></aside>
+<!--    <aside th:text="${message}"></aside>-->
 </body>
 </html>
 

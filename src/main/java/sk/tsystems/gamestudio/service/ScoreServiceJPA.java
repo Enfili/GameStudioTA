@@ -23,7 +23,7 @@ public class ScoreServiceJPA implements ScoreService{
         return entityManager
                 .createQuery("select s from Score s where s.game = :myGame order by s.points desc")
                 .setParameter( "myGame", game)
-                .setMaxResults(5)
+                .setMaxResults(50)
                 .getResultList();
     }
 
