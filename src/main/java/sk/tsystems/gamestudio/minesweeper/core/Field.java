@@ -204,4 +204,8 @@ public class Field {
             }
         }
     }
+
+    public Tile[][] getTiles() {
+        return tiles;
+    }
 }

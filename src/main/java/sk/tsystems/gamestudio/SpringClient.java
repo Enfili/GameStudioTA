@@ -27,7 +27,7 @@ public class SpringClient {
         new SpringApplicationBuilder(SpringClient.class).web(WebApplicationType.NONE).run(args);
     }
 
-//    @Bean
+    @Bean
     public CommandLineRunner runner(sk.tsystems.gamestudio.kamene.userInterface.ConsoleUI console) {
         return s -> console.play();
     }
@@ -37,7 +37,7 @@ public class SpringClient {
         return s -> console.play();
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner runnerJPA(PlaygroundJPA console) {
         return s -> console.play();
     }
@@ -87,8 +87,8 @@ public class SpringClient {
 
     @Bean
     public RatingService ratingService() {
-//        return new RatingServiceJPA();
-        return new RatingServiceRest();
+        return new RatingServiceJPA();
+//        return new RatingServiceRest();
     }
 
     @Bean
