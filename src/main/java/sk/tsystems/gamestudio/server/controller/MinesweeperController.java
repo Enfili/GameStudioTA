@@ -7,8 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
+import sk.tsystems.gamestudio.entity.Comment;
+import sk.tsystems.gamestudio.entity.Rating;
 import sk.tsystems.gamestudio.entity.Score;
 import sk.tsystems.gamestudio.minesweeper.core.*;
+import sk.tsystems.gamestudio.service.CommentService;
+import sk.tsystems.gamestudio.service.RatingService;
 import sk.tsystems.gamestudio.service.ScoreService;
 
 import java.util.Date;
@@ -34,6 +38,10 @@ public class MinesweeperController {
 
     @Autowired
     private ScoreService scoreService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private RatingService ratingService;
     @Autowired
     private UserController userController;
 
@@ -87,6 +95,22 @@ public class MinesweeperController {
         return "minesweeper";
     }
 
+    @RequestMapping("/comment")
+    public String addComment(String comment, Model model) {
+        if (userController.isLogged())
+            commentService.addComment(new Comment(GAME, userController.getLoggedUser(), comment, new Date()));
+        prepareModel(model);
+        return "minesweeper";
+    }
+
+    @RequestMapping("/rating")
+    public String addRating(int rating, Model model) {
+        if (userController.isLogged())
+            ratingService.setRating(new Rating(GAME, userController.getLoggedUser(), rating, new Date()));
+        prepareModel(model);
+        return "minesweeper";
+    }
+
     public String getCurrTime(){
         return new Date().toString();
     }
@@ -96,7 +120,6 @@ public class MinesweeperController {
     }
 
     public boolean isPlay() {
-        System.out.println(play);
         return play;
     }
 
@@ -168,6 +191,8 @@ public class MinesweeperController {
         model.addAttribute("minesweeperField", field.getTiles());
 
         model.addAttribute("bestScores", scoreService.getBestScores(GAME));
+        model.addAttribute("comments", commentService.getComments(GAME));
+        model.addAttribute("rating", ratingService.getAverageRating(GAME));
 
         if (field.getState().equals(GameState.PLAYING))
             model.addAttribute("gameState", "Hrá sa.");

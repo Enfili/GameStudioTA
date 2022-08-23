@@ -54,6 +54,23 @@
     </div>
 
     <div>
+        Priemerný rating: <span th:text="${rating}"></span>
+    </div>
+    <div th:if="not ${@minesweeperController.play}">
+        <label for="rating">Pridaj svoje hodnotenie do hry:</label>
+        <form action="/minesweeper/rating" method="post">
+            <select id="rating" name="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button type="submit">Pridaj</button> <br/>
+        </form>
+    </div>
+
+    <div>
         <table class="scores">
             <tr>
                 <th>Meno</th>
@@ -64,6 +81,28 @@
                 <td th:text="${score.getUsername}"></td>
                 <td th:text="${score.getPoints}"></td>
                 <td th:text="${score.getPlayedOn}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <br/>
+    <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>
+    <form action="/minesweeper/comment" method="post">
+        <input id="comment" type="text" name="comment" maxlength="1000"/>
+        <button type="submit">Odoslať</button> <br/>
+    </form>
+
+    <div>
+        <table class="comments">
+            <tr>
+                <th>Meno</th>
+                <th>Komentár</th>
+                <th>Dátum</th>
+            </tr>
+            <tr th:each="comment: ${comments}">
+                <td th:text="${comment.getUsername}"></td>
+                <td th:text="${comment.getComment}"></td>
+                <td th:text="${comment.getCommentedOn}"></td>
             </tr>
         </table>
     </div>
