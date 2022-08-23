@@ -18,7 +18,10 @@ import java.util.Date;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class MinesweeperController {
 
-    private Field field = new Field(9,9,10);
+    private int ROW_COUNT = 9;
+    private int COLUMN_COUNT = 9;
+    private int MINE_COUNT = 10;
+    private Field field = new Field(ROW_COUNT, COLUMN_COUNT, MINE_COUNT);
 
     private boolean marking = false;
     private boolean play = true;
@@ -31,6 +34,8 @@ public class MinesweeperController {
 
     @Autowired
     private ScoreService scoreService;
+    @Autowired
+    private UserController userController;
 
     public MinesweeperController() throws TooManyMinesException {
     }
@@ -51,7 +56,8 @@ public class MinesweeperController {
                     System.out.println(System.currentTimeMillis());
                     System.out.println(startTime);
                     score = field.getRowCount() * field.getColumnCount() * 10 - (int) ((System.currentTimeMillis() - startTime) / 1000);
-                    scoreService.addScore(new Score(GAME, "anonym", score, new Date()));
+                    if (userController.isLogged())
+                        scoreService.addScore(new Score(GAME, userController.getLoggedUser(), score, new Date()));
                 }
                 play = false;
             }
@@ -72,7 +78,7 @@ public class MinesweeperController {
 
     @RequestMapping("/new")
     public String newGame(Model model) throws TooManyMinesException {
-        field = new Field(9,9,10);
+        field = new Field(ROW_COUNT, COLUMN_COUNT, MINE_COUNT);
         play = true;
         won = false;
         lost = false;

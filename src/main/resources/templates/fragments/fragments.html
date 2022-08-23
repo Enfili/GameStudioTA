@@ -7,7 +7,17 @@
 <body>
 
 <header th:fragment="header">
-    <h1>Vitajte v Gamestudio!</h1>
+    <h1>Vitajte v <a href="/gamestudio">Gamestudio!</a></h1>
+
+    <div th:if="${@userController.logged}">
+        Prihlásený/á ako: <span th:text="${@userController.loggedUser}"/>
+        <a href="/logout">Odhlásiť sa</a>
+    </div>
+
+    <div th:if="not ${@userController.logged}">
+        Neprihlásený/á. Prosím,
+        <a href="/gamestudio">prihláste sa</a>.
+    </div>
 </header>
 
 <footer th:fragment="footer">
