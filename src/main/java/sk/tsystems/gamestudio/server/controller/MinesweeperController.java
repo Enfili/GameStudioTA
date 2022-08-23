@@ -18,7 +18,7 @@ import java.util.Date;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class MinesweeperController {
 
-    private Field field = new Field(9,9,0);
+    private Field field = new Field(9,9,10);
 
     private boolean marking = false;
     private boolean play = true;
@@ -50,7 +50,7 @@ public class MinesweeperController {
                 if (field.getState().equals(GameState.SOLVED)) {
                     System.out.println(System.currentTimeMillis());
                     System.out.println(startTime);
-                    score = field.getRowCount() * field.getColumnCount() * 10 - (int) (System.currentTimeMillis() - startTime);
+                    score = field.getRowCount() * field.getColumnCount() * 10 - (int) ((System.currentTimeMillis() - startTime) / 1000);
                     scoreService.addScore(new Score(GAME, "anonym", score, new Date()));
                 }
                 play = false;
@@ -77,6 +77,7 @@ public class MinesweeperController {
         won = false;
         lost = false;
         prepareModel(model);
+        startTime = System.currentTimeMillis();
         return "minesweeper";
     }
 

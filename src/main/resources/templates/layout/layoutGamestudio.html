@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="sk"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Stefan Korecko" />
+    <link rel="stylesheet"
+          href="/css/gamestudio.css"
+          media="screen" />
+</head>
+<body>
+<!--this replaces element -> you get header on webpage and not div-->
+<!--<div th:replace="/fragments/fragments :: header"></div>-->
+<!--this inserts element header from fragment into div and html on page remains as div-->
+<!--    <div th:insert="/fragments/fragments :: header"></div>-->
+    <header th:replace="/fragments/fragments :: header"></header>
+
+    <main layout:fragment="content"/>
+
+    <footer th:replace="/fragments/fragments :: footer"></footer>
+</body>
+</html>
