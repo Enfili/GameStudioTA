@@ -22,9 +22,9 @@ import java.util.Date;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class MinesweeperController {
 
-    private int ROW_COUNT = 9;
-    private int COLUMN_COUNT = 9;
-    private int MINE_COUNT = 10;
+    private final int ROW_COUNT = 9;
+    private final int COLUMN_COUNT = 9;
+    private final int MINE_COUNT = 10;
     private Field field = new Field(ROW_COUNT, COLUMN_COUNT, MINE_COUNT);
 
     private boolean marking = false;
@@ -32,7 +32,7 @@ public class MinesweeperController {
     private boolean won = false;
     private boolean lost = false;
 
-    private String GAME = "minesweeper";
+    private final String GAME = "minesweeper";
     private long startTime;
     private int score;
 

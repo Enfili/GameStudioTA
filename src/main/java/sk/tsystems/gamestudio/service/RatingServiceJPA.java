@@ -33,6 +33,12 @@ public class RatingServiceJPA implements RatingService{
 
     @Override
     public int getAverageRating(String game) {
+        if ((entityManager
+                .createQuery("select round(avg(r.rating)) from Rating r where r.game = :myGame")
+                .setParameter("myGame", game)
+                .getSingleResult()) == null)
+            return 0;
+
         return ((Number) (entityManager
                 .createQuery("select round(avg(r.rating)) from Rating r where r.game = :myGame")
                 .setParameter("myGame", game)

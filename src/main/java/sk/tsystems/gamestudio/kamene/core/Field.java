@@ -1,9 +1,13 @@
 package sk.tsystems.gamestudio.kamene.core;
 
+import sk.tsystems.gamestudio.kamene.userInterface.MoveOutOfFieldException;
+
 import java.io.Serializable;
+import java.util.Random;
 
 public class Field implements Serializable {
     private static final long serialVersionUID = 2L;
+    private String[] moves = {"w", "a", "s", "d"};
     private final int rowCount;
     private final int columnCount;
     private final Stone[][] stones;
@@ -74,5 +78,66 @@ public class Field implements Serializable {
             }
         }
         return true;
+    }
+
+    public void shuffle(int nbOfShifts) {
+        Random r = new Random();
+        for (int i = 0; i < nbOfShifts; i++) {
+            try {
+                shiftStone(moves[r.nextInt(4)]);
+            } catch (MoveOutOfFieldException e) {
+                // intentionally left empty
+            }
+        }
+    }
+
+    public void shiftStone(String shift) throws MoveOutOfFieldException {
+        int emptyRow = this.getEmptyStoneRow();
+        int emptyColumn = this.getEmptyStoneColumn();
+        switch (shift) {
+            case "w":
+            case "up":
+                if (emptyRow + 1 < this.getRowCount()) {
+                    swapStones(this.getStones()[emptyRow + 1][emptyColumn]);
+                } else {
+                    throw new MoveOutOfFieldException("Out of this field move.");
+                }
+                break;
+            case "a":
+            case "left":
+                if (emptyColumn + 1 < this.getColumnCount()) {
+                    swapStones(this.getStones()[emptyRow][emptyColumn + 1]);
+                } else {
+                    throw new MoveOutOfFieldException("Out of this field move.");
+                }
+                break;
+            case "s":
+            case "down":
+                if (emptyRow - 1 >= 0) {
+                    swapStones(this.getStones()[emptyRow - 1][emptyColumn]);
+                } else {
+                    throw new MoveOutOfFieldException("Out of this field move.");
+                }
+                break;
+            case "d":
+            case "right":
+                if (emptyColumn - 1 >= 0) {
+                    swapStones(this.getStones()[emptyRow][emptyColumn - 1]);
+                } else {
+                    throw new MoveOutOfFieldException("Out of this field move.");
+                }
+                break;
+        }
+    }
+
+    private void swapStones(Stone stone) {
+        this.getStones()[stone.getRow()][stone.getColumn()] = null;
+        this.getStones()[this.getEmptyStoneRow()][this.getEmptyStoneColumn()] = stone;
+        int newEmptyRow = stone.getRow();
+        int newEmptyColumn = stone.getColumn();
+        stone.setRow(this.getEmptyStoneRow());
+        stone.setColumn(this.getEmptyStoneColumn());
+        this.setEmptyStoneRow(newEmptyRow);
+        this.setEmptyStoneColumn(newEmptyColumn);
     }
 }

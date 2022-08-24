@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layoutGamestudio.html}"
+      lang="sk">
+<head>
+    <title>GameStudio - Kamene</title>
+</head>
+<body>
+<main layout:fragment="content">
+
+    <h2>Kamene</h2>
+    <div class="minesControl">
+        <a class="abutton" href="/kamene/new">Nova hra</a>
+    </div>
+
+    <div class="gameState">
+        <span th:if="${playing}">Hrá sa.</span>
+        <span th:if="not ${playing}">Vyhral si.</span>
+    </div>
+
+    <div>
+        <table class="minefield">
+            <tr th:each="row: ${field}">
+                <td th:each="stone: ${row}">
+                    <a th:if="${playing}" th:attr="href='/kamene?row='+${rowStat.index}+'&column='+${stoneStat.index}">
+                        <span th:text="${@kameneController.getStoneText(stone)}"></span>
+                    </a>
+
+                    <span th:if="not ${playing}" th:text="${@kameneController.getStoneText(stone)}"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <table class="scores">
+            <tr>
+                <th>Meno</th>
+                <th>Body</th>
+                <th>Dátum</th>
+            </tr>
+            <tr th:each="score: ${bestScores}">
+                <td th:text="${score.getUsername}"></td>
+                <td th:text="${score.getPoints}"></td>
+                <td th:text="${score.getPlayedOn}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        Priemerný rating: <span th:text="${rating}"></span>
+    </div>
+    <div th:if="not ${playing}">
+        <label for="rating">Pridaj svoje hodnotenie do hry:</label>
+        <form action="/kamene/rating" method="post">
+            <select id="rating" name="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button type="submit">Pridaj</button> <br/>
+        </form>
+    </div>
+
+    <br/>
+    <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>
+    <form action="/kamene/comment" method="post">
+        <input id="comment" type="text" name="comment" maxlength="1000"/>
+        <button type="submit">Odoslať</button> <br/>
+    </form>
+
+    <div>
+        <table class="comments">
+            <tr>
+                <th>Meno</th>
+                <th>Komentár</th>
+                <th>Dátum</th>
+            </tr>
+            <tr th:each="comment: ${comments}">
+                <td th:text="${comment.getUsername}"></td>
+                <td th:text="${comment.getComment}"></td>
+                <td th:text="${comment.getCommentedOn}"></td>
+            </tr>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

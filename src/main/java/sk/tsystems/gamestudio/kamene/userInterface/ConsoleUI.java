@@ -90,7 +90,7 @@ public class ConsoleUI {
     public void newGame(Field field) {
         this.field = field;
         widthOfEmptySpaces = String.valueOf(field.getColumnCount() * field.getRowCount()).length() + 1;
-        shuffle(2);
+        this.field.shuffle(2);
         runGame();
     }
 
@@ -367,7 +367,7 @@ public class ConsoleUI {
             String input = br.readLine().trim().toLowerCase();
             try {
                 checkInput(input);
-                shiftStone(input);
+                this.field.shiftStone(input);
             } catch (WrongInputFormatException | MoveOutOfFieldException e) {
                 System.out.println(e.getMessage());
             }
@@ -403,67 +403,6 @@ public class ConsoleUI {
             }
             System.out.println();
         }
-    }
-
-    private void shuffle(int nbOfShifts) {
-        Random r = new Random();
-        for (int i = 0; i < nbOfShifts; i++) {
-            try {
-                shiftStone(moves[r.nextInt(4)]);
-            } catch (MoveOutOfFieldException e) {
-                // intentionally left empty
-            }
-        }
-    }
-
-    private void shiftStone(String shift) throws MoveOutOfFieldException {
-        int emptyRow = field.getEmptyStoneRow();
-        int emptyColumn = field.getEmptyStoneColumn();
-        switch (shift) {
-            case "w":
-            case "up":
-                if (emptyRow + 1 < field.getRowCount()) {
-                    swapStones(field.getStones()[emptyRow + 1][emptyColumn]);
-                } else {
-                    throw new MoveOutOfFieldException("Out of this field move.");
-                }
-                break;
-            case "a":
-            case "left":
-                if (emptyColumn + 1 < field.getColumnCount()) {
-                    swapStones(field.getStones()[emptyRow][emptyColumn + 1]);
-                } else {
-                    throw new MoveOutOfFieldException("Out of this field move.");
-                }
-                break;
-            case "s":
-            case "down":
-                if (emptyRow - 1 >= 0) {
-                    swapStones(field.getStones()[emptyRow - 1][emptyColumn]);
-                } else {
-                    throw new MoveOutOfFieldException("Out of this field move.");
-                }
-                break;
-            case "d":
-            case "right":
-                if (emptyColumn - 1 >= 0) {
-                    swapStones(field.getStones()[emptyRow][emptyColumn - 1]);
-                } else {
-                    throw new MoveOutOfFieldException("Out of this field move.");
-                }
-                break;
-        }
-    }
-
-    private void swapStones(Stone stone) {
-        field.getStones()[stone.getRow()][stone.getColumn()] = null;
-        field.getStones()[field.getEmptyStoneRow()][field.getEmptyStoneColumn()] = stone;
-        int newEmptyRow = stone.getRow();
-        int newEmptyColumn = stone.getColumn();
-        stone.setRow(field.getEmptyStoneRow());
-        stone.setColumn(field.getEmptyStoneColumn());
-        field.setEmptyStoneRow(newEmptyRow);
-        field.setEmptyStoneColumn(newEmptyColumn);
     }
 
     private void saveGame() {
