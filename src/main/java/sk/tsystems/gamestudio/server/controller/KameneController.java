@@ -27,7 +27,7 @@ public class KameneController {
     private final int ROW_COUNT = 4;
     private final int COLUMN_COUNT = 4;
     private Field field = new Field(ROW_COUNT, COLUMN_COUNT);
-    private final int NUMBER_OF_SHUFFLE_MOVES = 5;
+    private final int NUMBER_OF_SHUFFLE_MOVES = 99;
 
     private boolean newGame = true;
     private int numberOfMoves = 0;
