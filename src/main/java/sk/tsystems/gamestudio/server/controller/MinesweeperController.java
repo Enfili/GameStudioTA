@@ -90,8 +90,7 @@ public class MinesweeperController {
     public Field processUserInputJson(@RequestParam(required = false) Integer row, @RequestParam(required = false) Integer column) throws TooManyMinesException {
         //method renamed from minesweeper
 
-        startOrUpdateGame(row, column);
-        this.field.setJustFinished(isPlaying);
+        this.field.setJustFinished(startOrUpdateGame(row, column));
         this.field.setMarking(marking);
         return this.field;
     }
@@ -243,8 +242,8 @@ public class MinesweeperController {
      * @param row    row of the tile on which the user clicked
      * @param column column of the tile on which the user clicked
      */
-    private void startOrUpdateGame(Integer row, Integer column) throws TooManyMinesException {
-
+    private boolean startOrUpdateGame(Integer row, Integer column) throws TooManyMinesException {
+        boolean justFinished = false;
         if (field == null) {
             startNewGame();
         }
@@ -260,7 +259,7 @@ public class MinesweeperController {
 
             if (this.field.getState() != GameState.PLAYING && this.isPlaying == true) { //I just won/lose
                 this.isPlaying = false;
-
+                justFinished = true;
 
                 if (userController.isLogged()) {
                     Score newScore = new Score("minesweeper", userController.getLoggedUser(), this.field.getScore(), new Date());
@@ -269,6 +268,7 @@ public class MinesweeperController {
                 }
             }
         }
+        return justFinished;
     }
 
     /**
