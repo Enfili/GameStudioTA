@@ -25,12 +25,11 @@
     <h2>Minesweeper</h2>
 
     <div class="minesControl">
-        <span th:text="${gameStatus}"></span>
-        <a th:if="${marking and isPlaying}"  class="abutton" href="/minesweeper/mark">Na otváranie.</a>
-        <a th:if=" ${not marking and isPlaying}" class="abutton" href="/minesweeper/mark">Na označovanie.</a>
+        <span id="gameStatus"></span>
 
-
-        <a  class="abutton" href="/minesweeper/new">Nová hra</a>
+        <button id="btToOpen" class="abutton">Na otváranie</button>
+        <button id="btToMark" class="abutton" >Na označovanie</button>
+        <button id="btNewGame" class="abutton">Nová hra</button>
     </div>
 
     <section>
@@ -48,24 +47,7 @@
         </table>
     </section>
 
-    <section>
-        <div>
-            Priemerný rating: <span th:text="${rating}"></span>
-        </div>
-        <div th:if="not ${isPlaying}">
-            <label for="rating">Pridaj svoje hodnotenie do hry:</label>
-            <form action="/minesweeper/rating" method="post">
-                <select id="rating" name="rating">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                <button type="submit">Pridaj</button> <br/>
-            </form>
-        </div>
-    </section>
+    <section id="minesweeperField"></section>
 
     <section>
         <h3>Najlepšie skóre</h3>
@@ -78,7 +60,7 @@
                 <th>Dátum a čas hry</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="scoresTableBody">
             <tr th:each="score: ${bestScores}">
                 <td th:text="${scoreStat.index+1}"></td>
                 <td th:text="${score.username}"></td>
@@ -89,31 +71,53 @@
         </table>
     </section>
 
-    <section>
-        <br/>
-        <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>
-        <form action="/minesweeper/comment" method="post">
-            <input id="comment" type="text" name="comment" maxlength="1000"/>
-            <button type="submit">Odoslať</button> <br/>
-        </form>
 
-        <div>
-            <table class="comments">
-                <tr>
-                    <th>Meno</th>
-                    <th>Komentár</th>
-                    <th>Dátum</th>
+<script type="text/javascript">
+    const getJsonUrl ="/api/score/minesweeper";
+    const tableBodyElmId="scoresTableBody";
+
+    fetchAndRenderBestScores(getJsonUrl,tableBodyElmId);
+
+    function fetchAndRenderBestScores(getJsonUrl,tableBodyElmId) {
+
+       fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
+           .then(response => {      //fetch promise fulfilled (operation completed successfully)
+               if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
+                   return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
+               } else { //if we get server error
+                   return Promise.reject(new Error(`Best scores acquisition failed. Server answered with ${response.status}: ${response.statusText}.`)); //we return a rejected promise to be catched later
+               }
+           })
+           .then(bestScoresData => { //here we process the returned response data in JSON ...
+               renderBestScores(bestScoresData, tableBodyElmId);
+           })
+           .catch(error => { ////here we process all the failed promises
+               errorMessage = "Nepodarilo sa získať údaje o najlepších skóre. Podrobnosti: " + error;
+               console.log(errorMessage);
+               //document.getElementById(fieldElmId).innerHTML =error;
+           });
+    }
+
+    function renderBestScores(bestScoresData, tableBodyElmId) {
+
+       const rowCount = bestScoresData.length;
+
+       let html2Render="";
+
+       for(row=0;row<rowCount;row++){
+           html2Render+=
+               `<tr>
+                   <td>${row+1} </td>
+                   <td>${bestScoresData[row].username}</td>
+                   <td>${bestScoresData[row].points}</td>
+                   <td>${bestScoresData[row].playedOn}</td>
                 </tr>
-                <tr th:each="comment: ${comments}">
-                    <td th:text="${comment.getUsername}"></td>
-                    <td th:text="${comment.getComment}"></td>
-                    <td th:text="${comment.getCommentedOn}"></td>
-                </tr>
-            </table>
-        </div>
-    </section>
+               `;
+       }
+       document.getElementById(tableBodyElmId).innerHTML=html2Render;
+    }
+</script>
 </main>
-
 
 </body>
 </html>

@@ -208,4 +208,18 @@ public class Field {
     public Tile[][] getTiles() {
         return tiles;
     }
+
+    public int getPlayTimeInSeconds(){
+        return (int) ((System.currentTimeMillis() - startMillis)/1000);
+    }
+
+    public int getScore() {
+        if (this.state==GameState.SOLVED){
+            return rowCount * columnCount * 10 - getPlayTimeInSeconds();
+        }else{
+            return 0;
+        }
+    }
+
+
 }
