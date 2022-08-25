@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layoutGamestudio.html}"
+        lang="sk">
+<head>
+    <title>Gamestudio - Piskvorky</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h2>Piškvorky</h2>
+
+    <section>
+        <table class="minefield">
+            <tr th:each="row: ${board}">
+                <td id="rowStat.index" th:each="symbol: ${row}">
+                    <button id="symbolStat.index" onclick="drawSymbol(rowStat.index, symbolStat.index)" th:text="${@piskvorkyController.getCellText(symbol)}"></button>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+
+<script type="text/javascript">
+    function drawSymbol(row, column) {
+
+    }
+</script>
+</main>
+</body>
+</html>
