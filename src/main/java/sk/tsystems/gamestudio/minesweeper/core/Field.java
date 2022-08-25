@@ -32,6 +32,8 @@ public class Field {
     private GameState state = GameState.PLAYING;
 
     private long startMillis;
+    private boolean marking;
+    private boolean justFinished;
 
     /**
      * Constructor.
@@ -221,5 +223,19 @@ public class Field {
         }
     }
 
+    public void setMarking(boolean marking) {
+        this.marking = marking;
+    }
 
+    public void setJustFinished(boolean justFinished) {
+        this.justFinished = justFinished;
+    }
+
+    public boolean isMarking() {
+        return marking;
+    }
+
+    public boolean isJustFinished() {
+        return justFinished;
+    }
 }

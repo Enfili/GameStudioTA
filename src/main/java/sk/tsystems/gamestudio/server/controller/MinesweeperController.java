@@ -91,6 +91,8 @@ public class MinesweeperController {
         //method renamed from minesweeper
 
         startOrUpdateGame(row, column);
+        this.field.setJustFinished(isPlaying);
+        this.field.setMarking(marking);
         return this.field;
     }
 
@@ -98,6 +100,8 @@ public class MinesweeperController {
     @ResponseBody
     public Field changeMarkingJson() {
         switchMode();
+        this.field.setJustFinished(false);
+        this.field.setMarking(marking);
         return this.field;
     }
 
@@ -105,6 +109,8 @@ public class MinesweeperController {
     @ResponseBody
     public Field newGameJson() throws TooManyMinesException {
         startNewGame();
+        this.field.setJustFinished(false);
+        this.field.setMarking(marking);
         return this.field;
     }
 
