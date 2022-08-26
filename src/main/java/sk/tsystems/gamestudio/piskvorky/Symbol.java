@@ -9,6 +9,7 @@ public class Symbol {
     }
 
     private State state;
+    //todo: remember that it is crossed out
 
     public Symbol() {
         this.state = State.EMPTY;

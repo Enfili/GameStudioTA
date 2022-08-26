@@ -20,34 +20,17 @@
 
 <main layout:fragment="content">
 
-    <!--/*@thymesVar id="minesweeperController" type="sk.tsystems.gamestudio.server.controller.MinesweeperController"*/-->
-
     <h2>Minesweeper</h2>
 
     <div class="minesControl">
         <span id="gameStatus"></span>
 
-        <button id="btToOpen" class="abutton">Na otváranie</button>
-        <button id="btToMark" class="abutton" >Na označovanie</button>
-        <button id="btNewGame" class="abutton">Nová hra</button>
+        <button type="button" id="btToOpenOrMark" class="abutton" onclick="processMarkingClick()">Na otváranie</button>
+        <button type="button" id="btNewGame" class="abutton" onclick="processNewGameClick()">Nová hra</button>
     </div>
 
-    <section>
-        <table class='minefield'>
-            <tr th:each="row: ${minesweeperField}">
-                <td th:each="tile: ${row}"
-                    th:attr="class=${@minesweeperController.getTileClass(tile)}">
-                    <a th:if="${isPlaying}" th:attr="href='/minesweeper?row='+${rowStat.index}+'&column='+${tileStat.index}">
-                        <span th:text="${@minesweeperController.getTileText(tile)}"></span>
-                    </a>
-
-                    <span th:if="not ${isPlaying}" th:text="${@minesweeperController.getTileText(tile)}"></span>
-                </td>
-            </tr>
-        </table>
-    </section>
-
     <section id="minesweeperField"></section>
+
 
     <section>
         <h3>Najlepšie skóre</h3>
@@ -61,62 +44,231 @@
             </tr>
             </thead>
             <tbody id="scoresTableBody">
-            <tr th:each="score: ${bestScores}">
-                <td th:text="${scoreStat.index+1}"></td>
-                <td th:text="${score.username}"></td>
-                <td th:text="${score.points}"></td>
-                <td th:text="${score.playedOn}"></td>
-            </tr>
             </tbody>
         </table>
     </section>
 
 
-<script type="text/javascript">
-    const getJsonUrl ="/api/score/minesweeper";
-    const tableBodyElmId="scoresTableBody";
+    <script type="text/javascript">
 
-    fetchAndRenderBestScores(getJsonUrl,tableBodyElmId);
+        const viewElements = {
+            minesweeperField: document.getElementById("minesweeperField"),
+            scoresTableBody: document.getElementById("scoresTableBody"),
+            btToOpenOrMark: document.getElementById("btToOpenOrMark"),
+            gameStatus: document.getElementById("gameStatus")
+        }
 
-    function fetchAndRenderBestScores(getJsonUrl,tableBodyElmId) {
+        console.log(viewElements);
 
-       fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
-           .then(response => {      //fetch promise fulfilled (operation completed successfully)
-               if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
-                   return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
-               } else { //if we get server error
-                   return Promise.reject(new Error(`Best scores acquisition failed. Server answered with ${response.status}: ${response.statusText}.`)); //we return a rejected promise to be catched later
-               }
-           })
-           .then(bestScoresData => { //here we process the returned response data in JSON ...
-               renderBestScores(bestScoresData, tableBodyElmId);
-           })
-           .catch(error => { ////here we process all the failed promises
-               errorMessage = "Nepodarilo sa získať údaje o najlepších skóre. Podrobnosti: " + error;
-               console.log(errorMessage);
-               //document.getElementById(fieldElmId).innerHTML =error;
-           });
-    }
+        //--------------------------------------------------------------------------------
 
-    function renderBestScores(bestScoresData, tableBodyElmId) {
+        fetchAndRenderBestScores("/api/score/minesweeper", viewElements);
+        fetchGameFieldAndRenderAll("/minesweeper/json", viewElements);
 
-       const rowCount = bestScoresData.length;
+        //--------------------------------------------------------------------------------
 
-       let html2Render="";
+        function processTileClick(row, col) {
+            fetchGameFieldAndRenderAll(
+                `/minesweeper/json?row=${row}&column=${col}`,
+                viewElements);
+        }
 
-       for(row=0;row<rowCount;row++){
-           html2Render+=
-               `<tr>
-                   <td>${row+1} </td>
-                   <td>${bestScoresData[row].username}</td>
-                   <td>${bestScoresData[row].points}</td>
-                   <td>${bestScoresData[row].playedOn}</td>
+        function processNewGameClick() {
+            fetchGameFieldAndRenderAll(
+                "/minesweeper/jsonnew",
+                viewElements);
+        }
+
+        function processModeChangeClick() {
+            fetchGameFieldAndRenderAll(
+                "/minesweeper/jsonmark",
+                viewElements);
+        }
+
+        //--------------------------------------
+
+        function fetchAndRenderBestScores(getJsonUrl, viewElements) {
+            fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
+                .then(response => {      //fetch promise fullfilled (operation completed successfully)
+                    if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
+                        return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
+                    } else { //if we get server error
+                        return Promise.reject(new Error(`Best scores acquisition failed. Server answered with ${response.status}: ${response.statusText}.`)); //we return a rejected promise to be catched later
+                    }
+                })
+                .then(bestScoresData => { //here we process the returned response data in JSON ...
+                    console.log(bestScoresData);
+                    renderBestScores(bestScoresData, viewElements);
+                })
+                .catch(error => { ////here we process all the failed promises
+                    errorMessage = "Nepodarilo sa získať alebo zobraziť údaje o najlepších skóre. Podrobnosti: " + error;
+                    console.log(errorMessage);
+                    //viewElements.minesweeperField.innerHTML =errorMessage;
+                });
+        }
+
+        function fetchGameFieldAndRenderAll(getJsonUrl, viewElements) {
+
+            fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
+                .then(response => {      //fetch promise fullfilled (operation completed successfully)
+                    if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
+                        return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
+                    } else { //if we get server error
+                        return Promise.reject(new Error(`Gamefield acquisition failed. Server answered with ${response.status}: ${response.statusText}.`)); //we return a rejected promise to be catched later
+                    }
+                })
+                .then(gameFieldData => { //here we process the returned response data in JSON ...
+                    console.log(gameFieldData);
+
+                    //1.update game status message
+                    const newStatusMessage = getGameStatusMessage(gameFieldData);
+
+                    if (viewElements.gameStatus.innerHTML != newStatusMessage) {
+                        console.log("new game status:" + newStatusMessage);
+                        viewElements.gameStatus.innerHTML = newStatusMessage;
+                        console.log(viewElements.gameStatus.innerHTML);
+                    }
+
+                    //2. update button visibility
+                    let newBtLabel = "Na označovanie";
+                    if (gameFieldData.marking) {
+                        newBtLabel = "Na otváranie";
+                    }
+                    if (viewElements.btToOpenOrMark.innerHTML != newBtLabel) {
+                        viewElements.btToOpenOrMark.innerHTML = newBtLabel;
+                    }
+
+                    //3. update Minesweeper game field
+                    renderGameField(gameFieldData, viewElements);
+
+                    //4. update best scores after the game ended
+                    if (gameFieldData.justFinished) {
+                        fetchAndRenderBestScores("/api/score/minesweeper", viewElements);
+                    }
+
+
+                })
+                .catch(error => { ////here we process all the failed promises
+                    errorMessage = "Nepodarilo sa získať alebo zobraziť herné pole so servera. Podrobnosti: " + error;
+                    console.log(errorMessage);
+                    //viewElements.minesweeperField.innerHTML =errorMessage;
+                });
+        }
+
+        //--------------------------------------
+
+        function renderBestScores(bestScoresData, viewElements) {
+            let html2Render = "";
+            const rowCount = bestScoresData.length;
+
+            for (row = 0; row < rowCount; row++) {
+                html2Render +=
+                    `<tr>
+                   <td>
+                       ${row + 1}
+                   </td>
+                   <td>
+                       ${bestScoresData[row].username}
+                   </td>
+                   <td>
+                       ${bestScoresData[row].points}
+                   </td>
+                   <td>
+                       ${bestScoresData[row].playedOn}
+                   </td>
                 </tr>
                `;
-       }
-       document.getElementById(tableBodyElmId).innerHTML=html2Render;
-    }
-</script>
+            }
+            viewElements.scoresTableBody.innerHTML = html2Render;
+        }
+
+        function renderGameField(gameFieldData, viewElements) {
+
+            let html2Render = "<table class='minefield'>\n";
+
+            for (row = 0; row < gameFieldData.rowCount; row++) {
+                html2Render += " <tr>\n";
+                for (col = 0; col < gameFieldData.columnCount; col++) {
+
+                    let onClickHandling = "";
+
+                    if (gameFieldData.state == "PLAYING") {
+                        onClickHandling = `onclick='processTileClick(${row},${col})'`;
+                    }
+
+                    html2Render +=
+                        `<td class='${getTileClass(gameFieldData.tiles[row][col])}' ${onClickHandling}>
+                      <span>
+                          ${getTileText(gameFieldData.tiles[row][col])}
+                      </span>
+                    </td>`;
+
+                }
+                html2Render += " </tr>\n";
+            }
+            html2Render += " <tr>\n";
+
+            html2Render += "</table>\n";
+
+            viewElements.minesweeperField.innerHTML = html2Render;
+        }
+
+        //--------------------------------------
+
+        function getTileText(tile) {
+            switch (tile.state) {
+                case "CLOSED":
+                    return "-";
+                case "MARKED":
+                    return "M";
+                case "OPEN":
+                    if (tile.value != undefined) {
+                        return "" + tile.value;
+                    } else {
+                        return "X";
+                    }
+                default:
+                    return "?";
+            }
+        }
+
+        function getTileClass(tile) {
+            switch (tile.state) {
+                case "CLOSED":
+                    return "closed";
+                case "MARKED":
+                    return "marked";
+                case "OPEN":
+                    if (tile.value != undefined) {
+                        return "open" + tile.value;
+                    } else {
+                        return "mine";
+                    }
+                default:
+                    return "unknown";
+            }
+        }
+
+        function getGameStatusMessage(gameFieldData) {
+            let gameStatus = "";
+            if (gameFieldData.state == "FAILED") {
+                gameStatus = "Prehral si";
+            } else if (gameFieldData.state == "SOLVED") {
+                gameStatus = "Vyhral si (skóre: " + gameFieldData.score + ")";
+            } else {
+                gameStatus = "Hraješ a ";
+                if (gameFieldData.marking) {
+                    gameStatus += "označuješ";
+                } else {
+                    gameStatus += "otváraš";
+                }
+            }
+
+            return gameStatus;
+        }
+    </script>
+
+
 </main>
 
 </body>

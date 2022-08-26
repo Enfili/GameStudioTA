@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layoutGamestudio.html}"
+        lang="sk">
+<head>
+  <title>Gamestudio - Minesweeper</title>
+</head>
+<body>
+<main>
+  <h2>Minesweeper</h2>
+
+  <div class="minesControl">
+    <span id="gameStatus"></span>
+    <button type="button" id="btNewGame" class="abutton" onclick="processNewGameClick()">Nová hra</button>
+  </div>
+
+  <section id="field"></section>
+
+  <section>
+    <h3>Najlepšie skóre</h3>
+    <table class="scores">
+      <thead>
+      <tr>
+        <th>Poradie</th>
+        <th>Meno</th>
+        <th>Body</th>
+        <th>Dátum a čas hry</th>
+      </tr>
+      </thead>
+      <tbody id="scoresTableBody">
+      </tbody>
+    </table>
+  </section>
+
+  <script type="text/javascript">
+
+    let elements = {
+      field: document.getElementById("field"),
+      scoresTableBody: document.getElementById("scoresTableBody")
+    }
+
+    fetchField("kamene/json", elements)
+
+    function fetchField(url, elements) {
+
+    }
+
+
+  </script>
+
+</main>
+</body>
+</html>

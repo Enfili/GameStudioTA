@@ -2,16 +2,19 @@ package sk.tsystems.gamestudio.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import sk.tsystems.gamestudio.entity.Comment;
 import sk.tsystems.gamestudio.entity.Rating;
 import sk.tsystems.gamestudio.entity.Score;
 import sk.tsystems.gamestudio.kamene.core.*;
 import sk.tsystems.gamestudio.kamene.userInterface.MoveOutOfFieldException;
+import sk.tsystems.gamestudio.minesweeper.core.TooManyMinesException;
 import sk.tsystems.gamestudio.service.CommentService;
 import sk.tsystems.gamestudio.service.RatingService;
 import sk.tsystems.gamestudio.service.ScoreService;
@@ -94,6 +97,24 @@ public class KameneController {
             ratingService.setRating(new Rating(GAME, userController.getLoggedUser(), rating, new Date()));
         prepareModel(model);
         return "kamene";
+    }
+
+    @RequestMapping("/asynch")
+    public String loadInAsynchMode() {
+        return "kameneAsynch";
+    }
+
+    @RequestMapping(value = "/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Field processUserInputJson(@RequestParam(required = false) Integer row, @RequestParam(required = false) Integer column) throws MoveOutOfFieldException {
+        if (row != null && column != null) {
+            String shift = canShift(row, column);
+            if (shift != null) {
+                this.field.shiftStone(shift);
+                numberOfMoves++;
+            }
+        }
+        return this.field;
     }
 
     private String canShift(int row, int column) {

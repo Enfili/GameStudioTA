@@ -79,9 +79,8 @@ public class MinesweeperController {
     }
 
     @RequestMapping("/asynch")
-    public String loadInAsynchMode(Model model) throws TooManyMinesException {
+    public String loadInAsynchMode() throws TooManyMinesException {
         startOrUpdateGame(null, null);
-        prepareModel(model);
         return "minesweeperAsynch";
     }
 
@@ -89,7 +88,6 @@ public class MinesweeperController {
     @ResponseBody
     public Field processUserInputJson(@RequestParam(required = false) Integer row, @RequestParam(required = false) Integer column) throws TooManyMinesException {
         //method renamed from minesweeper
-
         this.field.setJustFinished(startOrUpdateGame(row, column));
         this.field.setMarking(marking);
         return this.field;
@@ -261,7 +259,7 @@ public class MinesweeperController {
                 this.isPlaying = false;
                 justFinished = true;
 
-                if (userController.isLogged()) {
+                if (userController.isLogged() && this.field.getState() == GameState.SOLVED) {
                     Score newScore = new Score("minesweeper", userController.getLoggedUser(), this.field.getScore(), new Date());
                     scoreService.addScore(newScore);
 
@@ -281,13 +279,7 @@ public class MinesweeperController {
         }
     }
 
-    /**
-     * Fills the Spring MVC model object for the Thymeleaf template
-     *
-     * @param model - the Spring MVC model
-     */
-    private void prepareModel(Model model) {
-
+    private String getGameStatusMessage() {
         String gameStatus = "";
         if (this.field.getState() == GameState.FAILED) {
             gameStatus = "Prehral si";
@@ -301,10 +293,18 @@ public class MinesweeperController {
                 gameStatus += "otváraš";
             }
         }
+        return gameStatus;
+    }
 
+    /**
+     * Fills the Spring MVC model object for the Thymeleaf template
+     *
+     * @param model - the Spring MVC model
+     */
+    private void prepareModel(Model model) {
         model.addAttribute("isPlaying", this.isPlaying);
         model.addAttribute("marking", this.marking);
-        model.addAttribute("gameStatus", gameStatus);
+        model.addAttribute("gameStatus", getGameStatusMessage());
         model.addAttribute("minesweeperField", this.field.getTiles());
         model.addAttribute("bestScores", scoreService.getBestScores(GAME));
         model.addAttribute("comments", commentService.getComments(GAME));

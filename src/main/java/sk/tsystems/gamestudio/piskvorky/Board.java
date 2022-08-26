@@ -1,6 +1,8 @@
 package sk.tsystems.gamestudio.piskvorky;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Board {
 
@@ -24,8 +26,14 @@ public class Board {
     public void drawSymbol(int row, int column) {
         if (move % 2 == 1)
             this.board[row][column].setState(Symbol.State.CIRCLE);
-        else if (move % 2 == 2)
+        else if (move % 2 == 0)
             this.board[row][column].setState(Symbol.State.CROSS);
+
+        move++;
+    }
+
+    public void inRow(int nbOfNeighbours) {
+
     }
 
     public Symbol[][] getBoard() {

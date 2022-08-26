@@ -12,10 +12,14 @@
     <h2>Piškvorky</h2>
 
     <section>
-        <table class="minefield">
+        <table if="board" class="minefield">
             <tr th:each="row: ${board}">
-                <td id="rowStat.index" th:each="symbol: ${row}">
-                    <button id="symbolStat.index" onclick="drawSymbol(rowStat.index, symbolStat.index)" th:text="${@piskvorkyController.getCellText(symbol)}"></button>
+                <td th:each="symbol: ${row}">
+                    <a th:if="${@piskvorkyController.getCellText(symbol) == ' '}" th:attr="href='/piskvorky?row='+${rowStat.index}+'&column='+${symbolStat.index}">
+                        <span th:text="${@piskvorkyController.getCellText(symbol)}"></span>
+                    </a>
+                    <span th:if="${@piskvorkyController.getCellText(symbol) == 'O'}" style="color:blue;">O</span>
+                    <span th:if="${@piskvorkyController.getCellText(symbol) == 'X'}" style="color:red;">X</span>
                 </td>
             </tr>
         </table>
@@ -24,7 +28,9 @@
 
 <script type="text/javascript">
     function drawSymbol(row, column) {
-
+        // let board = document.getElementById(board);
+        // board.rows[row].columns[column].innerHTML = "J";
+        alert(row + " " + column);
     }
 </script>
 </main>
