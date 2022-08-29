@@ -1,11 +1,11 @@
 package sk.tsystems.gamestudio.server.controller;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -109,6 +109,20 @@ public class MinesweeperController {
         this.field.setJustFinished(false);
         this.field.setMarking(marking);
         return this.field;
+    }
+
+    @RequestMapping(value = "/jsoncomment", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void addComment(@RequestBody String comment) {
+        if (userController.isLogged())
+            commentService.addComment(new Comment(GAME, userController.getLoggedUser(), comment, new Date()));
+    }
+
+    @RequestMapping(value = "/jsonrating", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void setRating(@RequestBody String rating) {
+        if (userController.isLogged())
+            ratingService.setRating(new Rating(GAME, userController.getLoggedUser(), Integer.parseInt(rating), new Date()));
     }
 
     @RequestMapping("/comment")
@@ -260,7 +274,7 @@ public class MinesweeperController {
                 justFinished = true;
 
                 if (userController.isLogged() && this.field.getState() == GameState.SOLVED) {
-                    Score newScore = new Score("minesweeper", userController.getLoggedUser(), this.field.getScore(), new Date());
+                    Score newScore = new Score(GAME, userController.getLoggedUser(), this.field.getScore(), new Date());
                     scoreService.addScore(newScore);
 
                 }

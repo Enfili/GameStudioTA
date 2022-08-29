@@ -8,7 +8,7 @@ public class Player {
 
     @Id
     @GeneratedValue
-    private int ident;
+    private long ident;
 
     @Column(length = 32, nullable = false)
     private String userName;
@@ -65,5 +65,33 @@ public class Player {
 
     public Occupation getOccupation() {
         return occupation;
+    }
+
+    public long getIdent() {
+        return ident;
+    }
+
+    public void setIdent(long ident) {
+        this.ident = ident;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setSelfEvaluation(int selfEvaluation) {
+        this.selfEvaluation = selfEvaluation;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public void setOccupation(Occupation occupation) {
+        this.occupation = occupation;
     }
 }

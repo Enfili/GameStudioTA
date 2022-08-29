@@ -29,8 +29,9 @@ public class KameneController {
     private final String GAME = "kamene";
     private final int ROW_COUNT = 4;
     private final int COLUMN_COUNT = 4;
-    private Field field = new Field(ROW_COUNT, COLUMN_COUNT);
-    private final int NUMBER_OF_SHUFFLE_MOVES = 2;
+//    private Field field = new Field(ROW_COUNT, COLUMN_COUNT);
+    private Field field;
+    private final int NUMBER_OF_SHUFFLE_MOVES = 3;
 
     private boolean newGame = true;
     private int numberOfMoves = 0;
@@ -50,6 +51,7 @@ public class KameneController {
     public String kamene(@RequestParam(required = false) Integer row, @RequestParam(required = false) Integer column,
                          Model model) throws MoveOutOfFieldException {
         if (newGame) {
+            this.field = new Field(ROW_COUNT, COLUMN_COUNT);
             field.shuffle(NUMBER_OF_SHUFFLE_MOVES);
             newGame = false;
         }
@@ -101,6 +103,9 @@ public class KameneController {
 
     @RequestMapping("/asynch")
     public String loadInAsynchMode() {
+        if (this.field == null) {
+            generateNewField();
+        }
         return "kameneAsynch";
     }
 
@@ -111,10 +116,26 @@ public class KameneController {
             String shift = canShift(row, column);
             if (shift != null) {
                 this.field.shiftStone(shift);
-                numberOfMoves++;
+                this.numberOfMoves++;
             }
         }
+        if (field.isSolved() && userController.isLogged()) {
+            scoreService.addScore(new Score(GAME, userController.getLoggedUser(), NUMBER_OF_SHUFFLE_MOVES * 10 - numberOfMoves, new Date()));
+        }
         return this.field;
+    }
+
+    @RequestMapping(value = "/jsonnew", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Field newGameJson() {
+        generateNewField();
+        return this.field;
+    }
+
+    private void generateNewField() {
+        this.field = new Field(ROW_COUNT, COLUMN_COUNT);
+        this.field.shuffle(NUMBER_OF_SHUFFLE_MOVES);
+        this.numberOfMoves = 0;
     }
 
     private String canShift(int row, int column) {

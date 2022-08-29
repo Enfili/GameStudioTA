@@ -12,37 +12,34 @@ public class PlaygroundJPA {
 //    @PersistenceContext
 //    private EntityManager entityManager;
 
-    @Autowired
-    private StudentService studentService;
-    @Autowired
-    private StudentGroupService studentGroupService;
+//    @Autowired
+//    private StudentService studentService;
+//    @Autowired
+//    private StudentGroupService studentGroupService;
     @Autowired
     private CountryService countryService;
     @Autowired
     private OccupationService occupationService;
     @Autowired
     private PlayerService playerService;
-//    @Autowired
+    @Autowired
     private ScoreService scoreService;
-//    @Autowired
+    @Autowired
     private RatingService ratingService;
     @Autowired
     private CommentService commentService;
 
     public void play() {
 
-//        scoreService.addScore(new Score("minesweeper", "janko", 1000, new Date()));
+//        scoreService.addScore(new Score("minesweeper", "avokádo", 1000, new Date()));
 //        System.out.println(scoreService.getBestScores("minesweeper"));
+//
+//        commentService.addComment(new Comment("minesweeper", "mango", "superKoment3", new Date()));
+//        System.out.println(commentService.getComments("minesweeper"));
 
-//        ratingService.setRating(new Rating("minesweeper", "janko", 1, new Date()));
-//        ratingService.getRating("minesweeper", "janko");
-
-//        scoreService.addScore(new Score("kamene", "Stefan", 100, new Date()));
-
-        countryService.addCountry(new Country("Slovensko"));
-        countryService.addCountry(new Country("Cesko"));
-
-//        System.out.println(countryService.getCountries());
+//        ratingService.setRating(new Rating("minesweeper", "mango", 1, new Date()));
+//        ratingService.getRating("minesweeper", "mango");
+//        System.out.println(ratingService.getAverageRating("minesweeper"));
 
         occupationService.addOccupation(new Occupation("student"));
         occupationService.addOccupation(new Occupation("ziak"));
@@ -52,17 +49,25 @@ public class PlaygroundJPA {
         occupationService.addOccupation(new Occupation("nezamestnany"));
         occupationService.addOccupation(new Occupation("dochodca"));
         occupationService.addOccupation(new Occupation("invalid"));
+//
+        System.out.println(occupationService.getOccupations());
+//
+        countryService.addCountry(new Country("Maďarsko"));
+        countryService.addCountry(new Country("Rumunsko"));
+//
+        System.out.println(countryService.getCountries());
+        System.out.println(countryService.getCountries().get(1));
 
         playerService.addPlayer(new Player("Stefan", "Stefan Korecko", 3, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
         playerService.addPlayer(new Player("Stefan", "Stefan Korenko", 4, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
         playerService.addPlayer(new Player("Jaroslav", "Jaroslav Pavlicko", 5, countryService.getCountries().get(1), occupationService.getOccupations().get(2)));
         playerService.addPlayer(new Player("Martin", "Martin Petruska", 9, countryService.getCountries().get(1), occupationService.getOccupations().get(3)));
         playerService.addPlayer(new Player("Peter", "Peter Zivcak", 1, countryService.getCountries().get(1), occupationService.getOccupations().get(4)));
+//
+        System.out.println(playerService.getPlayersByUserName("Stefan"));
+        System.out.println(playerService.getPlayersByUserName("Stefan2"));
 
-//        System.out.println(playerService.getPlayersByUserName("Stefan"));
-//        System.out.println(playerService.getPlayersByUserName("Stefan2"));
-
-//        System.out.println(occupationService.getOccupations());
+        System.out.println(playerService.getPlayers());
 
     }
 }

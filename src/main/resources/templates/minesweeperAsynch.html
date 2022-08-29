@@ -31,6 +31,24 @@
 
     <section id="minesweeperField"></section>
 
+    <section>
+        <div>
+            Priemerný rating: <span id="averageRating"></span>
+        </div>
+        <div id="averageRatingDivForm">
+            <label for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
+            <form id="ratingForm">
+                <select id="ratingSelect" name="rating">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <button id="submitRating" type="submit">Pridaj</button> <br/>
+            </form>
+        </div>
+    </section>
 
     <section>
         <h3>Najlepšie skóre</h3>
@@ -48,6 +66,29 @@
         </table>
     </section>
 
+    <section>
+        <br/>
+        <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>
+        <form id="commentForm">
+            <input id="comment" type="text" name="comment" maxlength="1000"/>
+            <button id="commentSubmit" type="submit">Odoslať</button> <br/>
+        </form>
+
+        <div>
+            <table class="comments">
+                <thead>
+                <tr>
+                    <th>Meno</th>
+                    <th>Komentár</th>
+                    <th>Dátum</th>
+                </tr>
+                </thead>
+                <tbody id="commentsTable">
+                </tbody>
+            </table>
+        </div>
+    </section>
+
 
     <script type="text/javascript">
 
@@ -55,15 +96,66 @@
             minesweeperField: document.getElementById("minesweeperField"),
             scoresTableBody: document.getElementById("scoresTableBody"),
             btToOpenOrMark: document.getElementById("btToOpenOrMark"),
-            gameStatus: document.getElementById("gameStatus")
+            gameStatus: document.getElementById("gameStatus"),
+            averageRating: document.getElementById("averageRating"),
+            comments: document.getElementById("commentsTable")
         }
 
-        console.log(viewElements);
+        const rating = document.getElementById("ratingSelect");
+
+        console.log("selected rating: " + rating.options[rating.selectedIndex].value);
+
+        document.getElementById("ratingForm").addEventListener("submit", event => {
+            event.preventDefault();
+            submitRating("http://localhost:8080/minesweeper/jsonrating");
+            fetchAndRenderRating("/api/rating/minesweeper", viewElements);
+        });
+        document.getElementById("commentForm").addEventListener("submit", event => {
+            event.preventDefault();
+            submitComment("http://localhost:8080/minesweeper/jsoncomment");
+            fetchAndRenderComments("/api/comment/minesweeper", viewElements);
+        })
 
         //--------------------------------------------------------------------------------
 
         fetchAndRenderBestScores("/api/score/minesweeper", viewElements);
+        fetchAndRenderRating("/api/rating/minesweeper", viewElements);
+        fetchAndRenderComments("/api/comment/minesweeper", viewElements);
         fetchGameFieldAndRenderAll("/minesweeper/json", viewElements);
+
+        //--------------------------------------------------------------------------------
+
+        function submitComment(url) {
+            const request =
+                {
+                    method: 'POST',
+                    body: document.getElementById("comment").value.trim()
+                }
+            fetch(url, request)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
+                    }
+                });
+        }
+
+        function submitRating(url) {
+            const request =
+                {
+                    method: 'POST',
+                    body: document.getElementById("ratingSelect").options[rating.selectedIndex].value
+                }
+            fetch(url, request)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
+                    }
+                });
+        }
 
         //--------------------------------------------------------------------------------
 
@@ -86,6 +178,45 @@
         }
 
         //--------------------------------------
+        function fetchAndRenderComments(url, elements) {
+            fetch(url)  //there may be a second parameter, an object wih options, but we do not need it now.
+                .then(response => {      //fetch promise fullfilled (operation completed successfully)
+                    if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
+                        return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
+                    } else { //if we get server error
+                        return Promise.reject(new Error(`Comments acquisition failed. Server answered with ${response.status}: ${response.statusText}.`)); //we return a rejected promise to be catched later
+                    }
+                })
+                .then(comments => { //here we process the returned response data in JSON ...
+                    console.log(comments);
+                    renderComments(comments, elements);
+                })
+                .catch(error => { ////here we process all the failed promises
+                    errorMessage = "Nepodarilo sa získať alebo zobraziť komentáre. Podrobnosti: " + error;
+                    // console.log(errorMessage);
+                    elements.scoresTableBody.innerHTML = errorMessage;
+                });
+        }
+
+        function fetchAndRenderRating(getJsonUrl, viewElements) {
+            fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
+                .then(response => {      //fetch promise fullfilled (operation completed successfully)
+                    if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
+                        return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
+                    } else { //if we get server error
+                        return Promise.reject(new Error(`Average rating acquisition failed. Server answered with ${response.status}: ${response.statusText}.`)); //we return a rejected promise to be catched later
+                    }
+                })
+                .then(rating => { //here we process the returned response data in JSON ...
+                    console.log(rating);
+                    renderRating(rating, viewElements);
+                })
+                .catch(error => { ////here we process all the failed promises
+                    errorMessage = "Nepodarilo sa získať alebo zobraziť priemerný rating. Podrobnosti: " + error;
+                    console.log(errorMessage);
+                    //viewElements.minesweeperField.innerHTML =errorMessage;
+                });
+        }
 
         function fetchAndRenderBestScores(getJsonUrl, viewElements) {
             fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
@@ -108,7 +239,6 @@
         }
 
         function fetchGameFieldAndRenderAll(getJsonUrl, viewElements) {
-
             fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
                 .then(response => {      //fetch promise fullfilled (operation completed successfully)
                     if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
@@ -156,6 +286,25 @@
         }
 
         //--------------------------------------
+        function renderComments(comments, elements) {
+            const rowCount = comments.length;
+            let htmlToRender = "";
+
+            for (row = 0; row < rowCount; row++) {
+                htmlToRender +=
+                    `<tr>
+                        <td>${comments[row].username}</td>
+                        <td>${comments[row].comment}</td>
+                        <td>${comments[row].commentedOn}</td>
+                    </tr>`;
+            }
+
+            elements.comments.innerHTML = htmlToRender;
+        }
+
+        function renderRating(rating, viewElements) {
+            viewElements.averageRating.innerHTML = rating;
+        }
 
         function renderBestScores(bestScoresData, viewElements) {
             let html2Render = "";
@@ -256,7 +405,7 @@
             } else if (gameFieldData.state == "SOLVED") {
                 gameStatus = "Vyhral si (skóre: " + gameFieldData.score + ")";
             } else {
-                gameStatus = "Hraješ a ";
+                gameStatus = "Hráš a ";
                 if (gameFieldData.marking) {
                     gameStatus += "označuješ";
                 } else {

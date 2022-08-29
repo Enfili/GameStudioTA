@@ -9,4 +9,6 @@ public interface PlayerService {
     public List<Player> getPlayersByUserName(String uName);
 
     public void addPlayer(Player player);
+
+    public List<Player> getPlayers();
 }

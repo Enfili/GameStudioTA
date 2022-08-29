@@ -27,12 +27,12 @@ public class SpringClient {
         new SpringApplicationBuilder(SpringClient.class).web(WebApplicationType.NONE).run(args);
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner runner(sk.tsystems.gamestudio.kamene.userInterface.ConsoleUI console) {
         return s -> console.play();
     }
 
-//    @Bean
+    @Bean
     public CommandLineRunner runner(ConsoleUI console) {
         return s -> console.play();
     }
@@ -59,24 +59,27 @@ public class SpringClient {
 
     @Bean
     public PlayerService playerService() {
-        return new PlayerServiceJPA();
+//        return new PlayerServiceJPA();
+        return new PlayerServiceRest();
     }
 
     @Bean
     public CountryService countryService() {
-        return new CountryServiceJPA();
+//        return new CountryServiceJPA();
+        return new CountryServiceRest();
     }
 
     @Bean
     public OccupationService occupationService() {
-        return new OccupationServiceJPA();
+//        return new OccupationServiceJPA();
+        return new OccupationServiceRest();
     }
 
     @Bean
     public ScoreService scoreService() {
-        return new ScoreServiceRest();
+//        return new ScoreServiceRest();
 //        return new ScoreServiceJPA();
-        //return new ScoreServiceJDBC();
+        return new ScoreServiceRest();
     }
 
     @Bean
@@ -87,8 +90,8 @@ public class SpringClient {
 
     @Bean
     public RatingService ratingService() {
-        return new RatingServiceJPA();
-//        return new RatingServiceRest();
+//        return new RatingServiceJPA();
+        return new RatingServiceRest();
     }
 
     @Bean

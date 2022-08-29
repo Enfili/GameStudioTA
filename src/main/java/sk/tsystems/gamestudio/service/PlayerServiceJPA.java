@@ -25,4 +25,9 @@ public class PlayerServiceJPA implements PlayerService {
     public void addPlayer(Player player) {
         entityManager.persist(player);
     }
+
+    @Override
+    public List<Player> getPlayers() {
+        return null;
+    }
 }

@@ -84,4 +84,12 @@ public class Rating implements Serializable {
     public void setRatedOn(Date ratedOn) {
         this.ratedOn = ratedOn;
     }
+
+    public int getIdent() {
+        return ident;
+    }
+
+    public void setIdent(int ident) {
+        this.ident = ident;
+    }
 }
