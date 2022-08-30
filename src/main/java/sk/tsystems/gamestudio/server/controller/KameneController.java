@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -130,6 +131,20 @@ public class KameneController {
     public Field newGameJson() {
         generateNewField();
         return this.field;
+    }
+
+    @RequestMapping(value = "/jsoncomment", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void addComment(@RequestBody String comment) {
+        if (userController.isLogged())
+            commentService.addComment(new Comment(GAME, userController.getLoggedUser(), comment, new Date()));
+    }
+
+    @RequestMapping(value = "/jsonrating", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void setRating(@RequestBody String rating) {
+        if (userController.isLogged())
+            ratingService.setRating(new Rating(GAME, userController.getLoggedUser(), Integer.parseInt(rating), new Date()));
     }
 
     private void generateNewField() {

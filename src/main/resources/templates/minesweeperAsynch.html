@@ -36,8 +36,8 @@
             Priemerný rating: <span id="averageRating"></span>
         </div>
         <div id="averageRatingDivForm">
-            <label for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
-            <form id="ratingForm">
+            <label style="visibility: hidden" for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
+            <form style="visibility: hidden" id="ratingForm">
                 <select id="ratingSelect" name="rating">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -102,13 +102,12 @@
         }
 
         const rating = document.getElementById("ratingSelect");
-
-        console.log("selected rating: " + rating.options[rating.selectedIndex].value);
+        const divRatingForm = document.getElementById("averageRatingDivForm");
 
         document.getElementById("ratingForm").addEventListener("submit", event => {
             event.preventDefault();
             submitRating("http://localhost:8080/minesweeper/jsonrating");
-            fetchAndRenderRating("/api/rating/minesweeper", viewElements);
+            fetchAndRenderRating("/api/rating/avg/minesweeper", viewElements);
         });
         document.getElementById("commentForm").addEventListener("submit", event => {
             event.preventDefault();
@@ -119,7 +118,7 @@
         //--------------------------------------------------------------------------------
 
         fetchAndRenderBestScores("/api/score/minesweeper", viewElements);
-        fetchAndRenderRating("/api/rating/minesweeper", viewElements);
+        fetchAndRenderRating("/api/rating/avg/minesweeper", viewElements);
         fetchAndRenderComments("/api/comment/minesweeper", viewElements);
         fetchGameFieldAndRenderAll("/minesweeper/json", viewElements);
 
@@ -200,7 +199,7 @@
 
         function fetchAndRenderRating(getJsonUrl, viewElements) {
             fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
-                .then(response => {      //fetch promise fullfilled (operation completed successfully)
+                .then(response => {      //fetch promise fulfilled (operation completed successfully)
                     if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
                         return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
                     } else { //if we get server error
@@ -220,7 +219,7 @@
 
         function fetchAndRenderBestScores(getJsonUrl, viewElements) {
             fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
-                .then(response => {      //fetch promise fullfilled (operation completed successfully)
+                .then(response => {      //fetch promise fulfilled (operation completed successfully)
                     if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
                         return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
                     } else { //if we get server error
@@ -228,19 +227,17 @@
                     }
                 })
                 .then(bestScoresData => { //here we process the returned response data in JSON ...
-                    console.log(bestScoresData);
                     renderBestScores(bestScoresData, viewElements);
                 })
                 .catch(error => { ////here we process all the failed promises
                     errorMessage = "Nepodarilo sa získať alebo zobraziť údaje o najlepších skóre. Podrobnosti: " + error;
-                    console.log(errorMessage);
-                    //viewElements.minesweeperField.innerHTML =errorMessage;
+                    viewElements.minesweeperField.innerHTML =errorMessage;
                 });
         }
 
         function fetchGameFieldAndRenderAll(getJsonUrl, viewElements) {
             fetch(getJsonUrl)  //there may be a second parameter, an object wih options, but we do not need it now.
-                .then(response => {      //fetch promise fullfilled (operation completed successfully)
+                .then(response => {      //fetch promise fulfilled (operation completed successfully)
                     if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
                         return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
                     } else { //if we get server error
@@ -274,6 +271,19 @@
                     //4. update best scores after the game ended
                     if (gameFieldData.justFinished) {
                         fetchAndRenderBestScores("/api/score/minesweeper", viewElements);
+                        divRatingForm.innerHTML = `
+                                    <label for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
+                                        <form id="ratingForm">
+                                            <select id="ratingSelect" name="rating">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                            <button id="submitRating" type="submit">Pridaj</button> <br/>
+                                        </form>
+                            `;
                     }
 
 

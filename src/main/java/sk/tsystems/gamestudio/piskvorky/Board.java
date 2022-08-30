@@ -7,6 +7,8 @@ public class Board {
     private Symbol[][] board;
     private int rowCount;
     private int colCount;
+    private boolean playing;
+    private int move;
     private int[] score;
     // maps to remember symbols (inRows) that are in given direction on board
 //    private Map<String, ArrayList<InRow>> circlesInRow;
@@ -25,6 +27,8 @@ public class Board {
             }
         }
         score = new int[]{0, 0};
+        playing = true;
+        move = 1;
 
         crossedSymbols = new HashMap<>();
         for (String dir: DIRECTIONS) {
@@ -39,11 +43,15 @@ public class Board {
 //        }
     }
 
-    public void drawSymbol(int row, int column, int move) {
+    public void drawSymbol(int row, int column) {
         if (move % 2 == 1)
             this.board[row][column].setState(Symbol.State.CIRCLE);
         else if (move % 2 == 0)
             this.board[row][column].setState(Symbol.State.CROSS);
+
+        move++;
+        if (move > rowCount * colCount)
+            playing = false;
     }
 
     public boolean validMove(int row, int col) {
@@ -145,5 +153,9 @@ public class Board {
 
     public Map<String, ArrayList<InRow>> getCrossedSymbols() {
         return crossedSymbols;
+    }
+
+    public boolean isPlaying() {
+        return playing;
     }
 }

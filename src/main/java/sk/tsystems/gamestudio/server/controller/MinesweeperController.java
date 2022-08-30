@@ -269,14 +269,13 @@ public class MinesweeperController {
             }
 
 
-            if (this.field.getState() != GameState.PLAYING && this.isPlaying == true) { //I just won/lose
+            if (this.field.getState() != GameState.PLAYING && this.isPlaying == true) { //I just won/lost
                 this.isPlaying = false;
                 justFinished = true;
 
                 if (userController.isLogged() && this.field.getState() == GameState.SOLVED) {
                     Score newScore = new Score(GAME, userController.getLoggedUser(), this.field.getScore(), new Date());
                     scoreService.addScore(newScore);
-
                 }
             }
         }

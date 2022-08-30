@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 import sk.tsystems.gamestudio.service.*;
 
 
@@ -38,6 +39,11 @@ public class GameStudioServer {
     public PlayerService playerService() {
         return new PlayerServiceJPA();
     }
+
+//    @Bean
+//    public RestTemplate restTemplate() {
+//        return new RestTemplate();
+//    }
 
 }
 
