@@ -9,10 +9,11 @@ public class Symbol {
     }
 
     private State state;
-    //todo: remember that it is crossed out
+    private boolean crossedOut;
 
     public Symbol() {
         this.state = State.EMPTY;
+        crossedOut = false;
     }
 
     public State getState() {
@@ -21,5 +22,13 @@ public class Symbol {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public boolean isCrossedOut() {
+        return crossedOut;
+    }
+
+    public void setCrossedOut(boolean crossedOut) {
+        this.crossedOut = crossedOut;
     }
 }

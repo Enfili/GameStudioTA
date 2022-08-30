@@ -37,37 +37,37 @@ public class PlaygroundJPA {
 //        commentService.addComment(new Comment("minesweeper", "mango", "superKoment3", new Date()));
 //        System.out.println(commentService.getComments("minesweeper"));
 
-//        ratingService.setRating(new Rating("minesweeper", "mango", 1, new Date()));
-//        ratingService.getRating("minesweeper", "mango");
-//        System.out.println(ratingService.getAverageRating("minesweeper"));
+        ratingService.setRating(new Rating("minesweeper", "mango", 1, new Date()));
+        System.out.println(ratingService.getRating("minesweeper", "mango"));
+        System.out.println(ratingService.getAverageRating("minesweeper"));
 
-        occupationService.addOccupation(new Occupation("student"));
-        occupationService.addOccupation(new Occupation("ziak"));
-        occupationService.addOccupation(new Occupation("skolkar"));
-        occupationService.addOccupation(new Occupation("zamestnanec"));
-        occupationService.addOccupation(new Occupation("zivnostnik"));
-        occupationService.addOccupation(new Occupation("nezamestnany"));
-        occupationService.addOccupation(new Occupation("dochodca"));
-        occupationService.addOccupation(new Occupation("invalid"));
+//        occupationService.addOccupation(new Occupation("student"));
+//        occupationService.addOccupation(new Occupation("ziak"));
+//        occupationService.addOccupation(new Occupation("skolkar"));
+//        occupationService.addOccupation(new Occupation("zamestnanec"));
+//        occupationService.addOccupation(new Occupation("zivnostnik"));
+//        occupationService.addOccupation(new Occupation("nezamestnany"));
+//        occupationService.addOccupation(new Occupation("dochodca"));
+//        occupationService.addOccupation(new Occupation("invalid"));
+////
+//        System.out.println(occupationService.getOccupations());
+////
+//        countryService.addCountry(new Country("Maďarsko"));
+//        countryService.addCountry(new Country("Rumunsko"));
+////
+//        System.out.println(countryService.getCountries());
+//        System.out.println(countryService.getCountries().get(1));
 //
-        System.out.println(occupationService.getOccupations());
+//        playerService.addPlayer(new Player("Stefan", "Stefan Korecko", 3, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
+//        playerService.addPlayer(new Player("Stefan", "Stefan Korenko", 4, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
+//        playerService.addPlayer(new Player("Jaroslav", "Jaroslav Pavlicko", 5, countryService.getCountries().get(1), occupationService.getOccupations().get(2)));
+//        playerService.addPlayer(new Player("Martin", "Martin Petruska", 9, countryService.getCountries().get(1), occupationService.getOccupations().get(3)));
+//        playerService.addPlayer(new Player("Peter", "Peter Zivcak", 1, countryService.getCountries().get(1), occupationService.getOccupations().get(4)));
+////
+//        System.out.println(playerService.getPlayersByUserName("Stefan"));
+//        System.out.println(playerService.getPlayersByUserName("Stefan2"));
 //
-        countryService.addCountry(new Country("Maďarsko"));
-        countryService.addCountry(new Country("Rumunsko"));
-//
-        System.out.println(countryService.getCountries());
-        System.out.println(countryService.getCountries().get(1));
-
-        playerService.addPlayer(new Player("Stefan", "Stefan Korecko", 3, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
-        playerService.addPlayer(new Player("Stefan", "Stefan Korenko", 4, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
-        playerService.addPlayer(new Player("Jaroslav", "Jaroslav Pavlicko", 5, countryService.getCountries().get(1), occupationService.getOccupations().get(2)));
-        playerService.addPlayer(new Player("Martin", "Martin Petruska", 9, countryService.getCountries().get(1), occupationService.getOccupations().get(3)));
-        playerService.addPlayer(new Player("Peter", "Peter Zivcak", 1, countryService.getCountries().get(1), occupationService.getOccupations().get(4)));
-//
-        System.out.println(playerService.getPlayersByUserName("Stefan"));
-        System.out.println(playerService.getPlayersByUserName("Stefan2"));
-
-        System.out.println(playerService.getPlayers());
+//        System.out.println(playerService.getPlayers());
 
     }
 }
