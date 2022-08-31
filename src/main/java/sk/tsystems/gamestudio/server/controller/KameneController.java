@@ -34,7 +34,7 @@ public class KameneController {
     private final int COLUMN_COUNT = 4;
 //    private Field field = new Field(ROW_COUNT, COLUMN_COUNT);
     private Field field;
-    private final int NUMBER_OF_SHUFFLE_MOVES = 3;
+    private final int NUMBER_OF_SHUFFLE_MOVES = 6;
 
     private boolean newGame = true;
     private int numberOfMoves = 0;
@@ -137,13 +137,18 @@ public class KameneController {
 
     @RequestMapping(value ="/keyboardControl", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    private void keyboardControl(@RequestBody String key) throws MoveOutOfFieldException {
-        System.out.println(key);
-        Pattern possibleMoves = Pattern.compile("[wasd]");
-        Matcher matcher = possibleMoves.matcher(key);
-        if (matcher.matches()) {
-            this.field.shiftStone(key);
-            processUserInputJson(null, null);
+    private void keyboardControl(@RequestBody String key) {
+        if (!field.isSolved()) {
+            Pattern possibleMoves = Pattern.compile("[wasd]");
+            Matcher matcher = possibleMoves.matcher(key);
+            if (matcher.matches()) {
+                try {
+                    this.field.shiftStone(key);
+                    processUserInputJson(null, null);
+                } catch (MoveOutOfFieldException e) {
+                    return;
+                }
+            }
         }
     }
 

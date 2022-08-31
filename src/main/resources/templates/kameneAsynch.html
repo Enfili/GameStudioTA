@@ -7,7 +7,7 @@
 <head>
     <title>Gamestudio - Kamene</title>
 </head>
-<body>
+<body id="body">
 <main layout:fragment="content">
     <h2>Kamene</h2>
 
@@ -89,9 +89,10 @@
 
         const divRatingForm = document.getElementById("averageRatingDivForm");
 
-        document.getElementById("keyboardControl").addEventListener('keyup', event => {
+        document.getElementById("body").addEventListener('keyup', event => {
             event.preventDefault();
-            console.log(event)
+            keyboardControl(event);
+            fetchAndRenderField("/kamene/json", elements);
         });
 
         document.getElementById("ratingForm").addEventListener("submit", event => {
@@ -145,7 +146,6 @@
 
         //---------------------processing
         function keyboardControl(event) {
-            console.log("key: " + event.key);
             const request =
                 {
                     method: 'POST',
