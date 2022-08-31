@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(uniqueConstraints={@UniqueConstraint(name = "UniqueGameAndUsername", columnNames = {"game", "username"})})
-public class Rating implements Serializable {
+public class Rating {
     @Id
     @GeneratedValue
     private int ident;
@@ -32,9 +32,9 @@ public class Rating implements Serializable {
 
     public Rating() {}
 
-    public void Rating(int rating) {
-        this.rating = rating;
-    }
+//    public void Rating(int rating) {
+//        this.rating = rating;
+//    }
 
     public Rating(String game, String username, int rating, Date ratedOn) {
         this.game = game;

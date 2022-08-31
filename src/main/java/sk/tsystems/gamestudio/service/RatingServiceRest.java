@@ -15,7 +15,7 @@ public class RatingServiceRest implements RatingService {
 
     @Override
     public void setRating(Rating rating) {
-        restTemplate.postForEntity(url + "/rating", rating, Rating.class);
+        restTemplate.postForEntity(url + "/rating/", rating, Rating.class);
     }
 
     @Override
@@ -25,8 +25,8 @@ public class RatingServiceRest implements RatingService {
 
     @Override
     public int getRating(String game, String username) {
-        return restTemplate.getForEntity(url + "/rating/" + game + "/" + username, Rating.class).getBody().getRating();
-//        return restTemplate.getForObject(url + "/rating/" + game + "/" + username, Rating.class).getRating();
+//        return restTemplate.getForEntity(url + "/rating/" + game + "/" + username, Rating.class).getBody().getRating();
+        return restTemplate.getForObject(url + "/rating/" + game + "/" + username, Rating.class).getRating();
     }
 
     @Override

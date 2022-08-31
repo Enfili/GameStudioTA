@@ -175,18 +175,8 @@ public class ConsoleUI implements UserInterface {
 
     private void handlePlayer(String playerName) {
         try {
-            List<Player> players = playerService.getPlayersByUserName(playerName);
-            if (players.size() != 0) {
-                for (Player player : players) {
-                    System.out.println(player.toString());
-                }
-                System.out.println("Môžeš si vybrať zo zoznamu hráčov (1) alebo pridať nového hráča (2).");
-                int choice = Integer.parseInt(readLine());
-                if (choice == 1)
-                    choosePlayer(players);
-                else if (choice == 2)
-                    addPlayerToDatabase(playerName);
-            } else {
+            Player player = playerService.getPlayerByUserName(playerName);
+            if (player == null) {
                 addPlayerToDatabase(playerName);
             }
         } catch (GameStudioException e) {

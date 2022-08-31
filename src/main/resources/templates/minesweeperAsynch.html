@@ -179,7 +179,7 @@
         //--------------------------------------
         function fetchAndRenderComments(url, elements) {
             fetch(url)  //there may be a second parameter, an object wih options, but we do not need it now.
-                .then(response => {      //fetch promise fullfilled (operation completed successfully)
+                .then(response => {      //fetch promise fulfilled (operation completed successfully)
                     if (response.ok) {    //successful execution includes an error response from the server. So we have to check the return status of the response here.
                         return response.json(); //we return a new promise with the response data as a js object, constructed from the JSON string in the response
                     } else { //if we get server error

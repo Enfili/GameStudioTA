@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PlayerService {
 
-    public List<Player> getPlayersByUserName(String uName);
+    public Player getPlayerByUserName(String uName);
 
     public void addPlayer(Player player);
 

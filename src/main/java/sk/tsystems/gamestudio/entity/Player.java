@@ -3,14 +3,14 @@ package sk.tsystems.gamestudio.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(uniqueConstraints={@UniqueConstraint(name = "UniqueUserNameAndFullName", columnNames = {"userName", "fullName"})})
+//@Table(uniqueConstraints={@UniqueConstraint(name = "UniqueUserNameAndFullName", columnNames = {"userName", "fullName"})})
 public class Player {
 
     @Id
     @GeneratedValue
     private long ident;
 
-    @Column(length = 32, nullable = false)
+    @Column(length = 32, nullable = false, unique = true)
     private String userName;
 
     @Column(length = 128, nullable = false)

@@ -9,12 +9,17 @@
 
 <body>
 <main layout:fragment="content">
+<!--STATIC-->
+<!--  <form th:if="not ${logged}" action="/login" method="post">-->
+<!--    <label for="login">Meno: </label><input id="login" type="text" name="login" required/> <br/>-->
+<!--    <label for="password">Heslo: </label><input id="password" type="password" name="password" required/> <br/>-->
+<!--    <button type="submit">Prihlásiť sa</button>-->
+<!--  </form>-->
 
-  <form th:if="not ${logged}" action="/login" method="post">
-    <label for="login">Meno: </label><input id="login" type="text" name="login" required/> <br/>
-    <label for="password">Heslo: </label><input id="password" type="password" name="password" required/> <br/>
-    <button type="submit">Prihlásiť sa</button>
+  <form id="loginForm">
+
   </form>
+
   <h2>Hry</h2>
   <ul>
     <li><a href="/minesweeper">Minesweeper</a></li>
@@ -23,6 +28,30 @@
     <li><a href="/kamene/asynch">Kamene (asynchrónny mód)</a></li>
     <li><a href="/piskvorky">Piškvorky</a></li>
   </ul>
+
+  <script type="text/javascript">
+    const loginForm = document.getElementById("loginForm");
+    fetchLogin("/loggedIn");
+
+    function fetchLogin(url) {
+      fetch(url)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            return Promise.reject(new Error(`Comments acquisition failed. Server answered with ${response.status}: ${response.statusText}.`));
+          }
+        })
+        .then(login => {
+
+        })
+        .catch(error => {
+          errorMessage = "Nepodarilo sa získať alebo zobraziť komentáre. Podrobnosti: " + error;
+          elements.scoresTableBody.innerHTML = errorMessage;
+        });
+    }
+
+  </script>
 
 </main>
 </body>

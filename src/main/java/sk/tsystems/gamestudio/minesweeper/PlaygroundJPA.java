@@ -37,9 +37,11 @@ public class PlaygroundJPA {
 //        commentService.addComment(new Comment("minesweeper", "mango", "superKoment3", new Date()));
 //        System.out.println(commentService.getComments("minesweeper"));
 
-        ratingService.setRating(new Rating("minesweeper", "mango", 1, new Date()));
-        System.out.println(ratingService.getRating("minesweeper", "mango"));
-        System.out.println(ratingService.getAverageRating("minesweeper"));
+        ratingService.setRating(new Rating("minesweeper", "Mango", 3, new Date()));
+        ratingService.setRating(new Rating("minesweeper", "Avokádo", 1, new Date()));
+        System.out.println(ratingService.getRating("minesweeper", "Mango"));
+        System.out.println(ratingService.getRating("minesweeper", "Avokádo"));
+//        System.out.println(ratingService.getAverageRating("minesweeper"));
 
 //        occupationService.addOccupation(new Occupation("student"));
 //        occupationService.addOccupation(new Occupation("ziak"));
@@ -54,18 +56,23 @@ public class PlaygroundJPA {
 ////
 //        countryService.addCountry(new Country("Maďarsko"));
 //        countryService.addCountry(new Country("Rumunsko"));
+//        countryService.addCountry(new Country("Slovensko"));
+//        countryService.addCountry(new Country("Poľsko"));
+//        countryService.addCountry(new Country("Česko"));
+//        countryService.addCountry(new Country("Nemecko"));
+//        countryService.addCountry(new Country("Francúzsko"));
+//        countryService.addCountry(new Country("Taliansko"));
 ////
 //        System.out.println(countryService.getCountries());
 //        System.out.println(countryService.getCountries().get(1));
 //
-//        playerService.addPlayer(new Player("Stefan", "Stefan Korecko", 3, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
-//        playerService.addPlayer(new Player("Stefan", "Stefan Korenko", 4, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
-//        playerService.addPlayer(new Player("Jaroslav", "Jaroslav Pavlicko", 5, countryService.getCountries().get(1), occupationService.getOccupations().get(2)));
-//        playerService.addPlayer(new Player("Martin", "Martin Petruska", 9, countryService.getCountries().get(1), occupationService.getOccupations().get(3)));
-//        playerService.addPlayer(new Player("Peter", "Peter Zivcak", 1, countryService.getCountries().get(1), occupationService.getOccupations().get(4)));
-////
-//        System.out.println(playerService.getPlayersByUserName("Stefan"));
-//        System.out.println(playerService.getPlayersByUserName("Stefan2"));
+//        playerService.addPlayer(new Player("Mango", "Mangifera indica", 3, countryService.getCountries().get(1), occupationService.getOccupations().get(1)));
+//        playerService.addPlayer(new Player("Avokádo", "Persea americana", 5, countryService.getCountries().get(1), occupationService.getOccupations().get(2)));
+//        playerService.addPlayer(new Player("Melón", "Citrullus lanatus", 9, countryService.getCountries().get(1), occupationService.getOccupations().get(3)));
+//        playerService.addPlayer(new Player("Figa", "Ficus carica", 1, countryService.getCountries().get(1), occupationService.getOccupations().get(4)));
+//
+//        System.out.println(playerService.getPlayerByUserName("Mango"));
+//        System.out.println(playerService.getPlayerByUserName("Avokádo"));
 //
 //        System.out.println(playerService.getPlayers());
 

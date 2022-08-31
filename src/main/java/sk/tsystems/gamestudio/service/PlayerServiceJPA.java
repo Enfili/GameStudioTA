@@ -14,11 +14,17 @@ public class PlayerServiceJPA implements PlayerService {
     private EntityManager entityManager;
 
     @Override
-    public List<Player> getPlayersByUserName(String uName) {
-        return entityManager
+    public Player getPlayerByUserName(String uName) {
+        if (entityManager
                 .createQuery("select p from Player p where p.userName = :username")
                 .setParameter("username", uName)
-                .getResultList();
+                .getResultList()
+                .isEmpty())
+            return null;
+        return (Player) entityManager
+                .createQuery("select p from Player p where p.userName = :username")
+                .setParameter("username", uName)
+                .getSingleResult();
     }
 
     @Override

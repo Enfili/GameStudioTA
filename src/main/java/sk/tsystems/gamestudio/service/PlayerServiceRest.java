@@ -2,6 +2,7 @@ package sk.tsystems.gamestudio.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 import sk.tsystems.gamestudio.entity.Player;
 
@@ -17,8 +18,8 @@ public class PlayerServiceRest implements PlayerService{
     RestTemplate restTemplate;
 
     @Override
-    public List<Player> getPlayersByUserName(String uName) {
-        return Arrays.asList(restTemplate.getForEntity(url + "/player" + "/uName", Player[].class).getBody());
+    public Player getPlayerByUserName(String uName) {
+        return restTemplate.getForEntity(url + "/player/" + uName, Player.class).getBody();
     }
 
     @Override

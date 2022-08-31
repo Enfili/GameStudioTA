@@ -41,6 +41,7 @@ public class SpringClient {
     public CommandLineRunner runnerJPA(PlaygroundJPA console) {
         return s -> console.play();
     }
+//----------------------------------------------
 
     @Bean
     public PlaygroundJPA consoleJPA() {
@@ -56,41 +57,42 @@ public class SpringClient {
     public ConsoleUI console() {
         return new ConsoleUI();
     }
+//---------------------------------------------
 
     @Bean
     public PlayerService playerService() {
-        return new PlayerServiceJPA();
-//        return new PlayerServiceRest();
+//        return new PlayerServiceJPA();
+        return new PlayerServiceRest();
     }
 
     @Bean
     public CountryService countryService() {
-        return new CountryServiceJPA();
-//        return new CountryServiceRest();
+//        return new CountryServiceJPA();
+        return new CountryServiceRest();
     }
 
     @Bean
     public OccupationService occupationService() {
-        return new OccupationServiceJPA();
-//        return new OccupationServiceRest();
+//        return new OccupationServiceJPA();
+        return new OccupationServiceRest();
     }
 
     @Bean
     public ScoreService scoreService() {
-        return new ScoreServiceJPA();
-//        return new ScoreServiceRest();
+//        return new ScoreServiceJPA();
+        return new ScoreServiceRest();
     }
 
     @Bean
     public CommentService commentService() {
-        return new CommentServiceJPA();
-//        return new CommentServiceRest();
+//        return new CommentServiceJPA();
+        return new CommentServiceRest();
     }
 
     @Bean
     public RatingService ratingService() {
-        return new RatingServiceJPA();
-//        return new RatingServiceRest();
+//        return new RatingServiceJPA();
+        return new RatingServiceRest();
     }
 
     @Bean

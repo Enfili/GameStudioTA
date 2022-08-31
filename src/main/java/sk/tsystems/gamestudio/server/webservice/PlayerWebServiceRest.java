@@ -16,8 +16,8 @@ public class PlayerWebServiceRest {
     PlayerService playerService;
 
     @GetMapping("/{uName}")
-    public List<Player> getPlayersByUserName(@PathVariable String uName) {
-        return playerService.getPlayersByUserName(uName);
+    public Player getPlayerByUserName(@PathVariable String uName) {
+        return playerService.getPlayerByUserName(uName);
     }
 
     @PostMapping
@@ -25,8 +25,8 @@ public class PlayerWebServiceRest {
         playerService.addPlayer(player);
     }
 
-    @GetMapping("/all")
-    public List<Player> getPlayers() {
-        return playerService.getPlayers();
-    }
+//    @GetMapping
+//    public List<Player> getPlayers() {
+//        return playerService.getPlayers();
+//    }
 }
