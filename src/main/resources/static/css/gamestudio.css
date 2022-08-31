@@ -215,6 +215,13 @@ table.minefield td.open8 {
         min-width: 1em;
         min-height: 1em;
     }
+
+    /*canvas {*/
+    /*    width: 100vw;*/
+    /*    height: 100vw;*/
+    /*    min-width: 12em;*/
+    /*    min-height: 12em;*/
+    /*}*/
 }
 
 @media (max-height: 780px),
@@ -226,6 +233,11 @@ table.minefield td.open8 {
         width: 5vh;
         height: 5vh;
     }
+
+    /*canvas {*/
+    /*    width: 50vh;*/
+    /*    height: 50vh;*/
+    /*}*/
 }
 
 /*some animation for mine*/

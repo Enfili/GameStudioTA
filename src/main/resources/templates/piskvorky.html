@@ -87,12 +87,13 @@
         comments: document.getElementById("commentsTable")
     }
 
-    var grid = document.getElementById("grid");
-    const gridWidth = grid.offsetWidth;
-    const rowCount = 12;
-    const cellWidth = gridWidth / rowCount;
-    var context = grid.getContext("2d");
+    let grid = document.getElementById("grid");
+    let context = grid.getContext("2d");
     const score = document.getElementById("score");
+
+    let gridWidth = grid.offsetWidth;
+    let rowCount = 12;
+    let cellWidth = gridWidth / rowCount;
 
     grid.addEventListener("click", addSymbol)
 
@@ -154,6 +155,8 @@
     // CLICKS
     //------------------------------------
     function addSymbol(event) {
+        calculateCellWidth();
+
         let rect = event.target.getBoundingClientRect();
         let x = event.clientX - rect.left;
         let y = event.clientY - rect.top;
@@ -324,6 +327,7 @@
     // DRAWING
     //------------------------------------
     function drawCanvas() {
+        calculateCellWidth();
         context.strokeStyle = "black";
         context.lineWidth = 1;
         context.beginPath();
@@ -340,6 +344,7 @@
     }
 
     function drawSymbols(gridData) {
+        calculateCellWidth();
         context.lineWidth = 4;
         for (let row = 0; row < rowCount; row++) {
             for (let col = 0; col < rowCount; col++) {
@@ -364,6 +369,7 @@
     }
 
     function drawCrossLines(gridData) {
+        calculateCellWidth();
         context.lineWidth = 4;
 
         let nbOfCrossedSymbols = gridData.crossedSymbols.right.length;
@@ -432,6 +438,10 @@
         }
     }
 
+    function calculateCellWidth() {
+        gridWidth = grid.offsetWidth;
+        cellWidth = gridWidth / rowCount;
+    }
 
 </script>
 </main>

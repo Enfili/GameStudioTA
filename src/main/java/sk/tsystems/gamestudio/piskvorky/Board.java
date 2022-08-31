@@ -11,8 +11,8 @@ public class Board {
     private int move;
     private int[] score;
     // maps to remember symbols (inRows) that are in given direction on board
-//    private Map<String, ArrayList<InRow>> circlesInRow;
-//    private Map<String, ArrayList<InRow>> crossesInRow;
+    private Map<String, ArrayList<InRow>> circlesInRow;
+    private Map<String, ArrayList<InRow>> crossesInRow;
     private Map<String, ArrayList<InRow>> crossedSymbols;
 
     private final String[] DIRECTIONS = {"down", "right", "upRight", "downRight"};
@@ -35,12 +35,12 @@ public class Board {
             crossedSymbols.put(dir, new ArrayList<>());
         }
 
-//        circlesInRow = new HashMap<>();
-//        crossesInRow = new HashMap<>();
-//        for (String dir: DIRECTIONS) {
-//            circlesInRow.put(dir, new ArrayList<>());
-//            crossesInRow.put(dir, new ArrayList<>());
-//        }
+        circlesInRow = new HashMap<>();
+        crossesInRow = new HashMap<>();
+        for (String dir: DIRECTIONS) {
+            circlesInRow.put(dir, new ArrayList<>());
+            crossesInRow.put(dir, new ArrayList<>());
+        }
     }
 
     public void drawSymbol(int row, int column) {

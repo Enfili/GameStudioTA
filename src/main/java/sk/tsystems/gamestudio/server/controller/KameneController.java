@@ -136,14 +136,14 @@ public class KameneController {
     @RequestMapping(value = "/jsoncomment", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void addComment(@RequestBody String comment) {
-        if (userController.isLogged())
+        if (userController.isLogged() && userController.isUserAlreadyExists())
             commentService.addComment(new Comment(GAME, userController.getLoggedUser(), comment, new Date()));
     }
 
     @RequestMapping(value = "/jsonrating", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void setRating(@RequestBody String rating) {
-        if (userController.isLogged())
+        if (userController.isLogged() && userController.isUserAlreadyExists())
             ratingService.setRating(new Rating(GAME, userController.getLoggedUser(), Integer.parseInt(rating), new Date()));
     }
 

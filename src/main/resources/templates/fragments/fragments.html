@@ -9,9 +9,13 @@
 <header th:fragment="header">
     <h1>Vitajte v <a href="/gamestudio">Gamestudio!</a></h1>
 
-    <div th:if="${@userController.logged}">
+    <div th:if="${@userController.logged and @userController.userAlreadyExists}">
         Prihlásený/á ako: <span th:text="${@userController.loggedUser}"/>
         <a href="/logout">Odhlásiť sa</a>
+    </div>
+
+    <div th:if="${@userController.logged and not @userController.userAlreadyExists}">
+        Registrujte sa ako: <span th:text="${@userController.loggedUser}"/>
     </div>
 
     <div th:if="not ${@userController.logged}">

@@ -15,23 +15,23 @@ public class GamestudioController {
     @Autowired
     private UserController userController;
 
-    @RequestMapping
-    private String mainPage() {
+    @RequestMapping("/gamestudio")
+    public String mainPage(Model model) {
+        prepareModel(model);
         return "gamestudio";
     }
 
-    @RequestMapping("/loggedIn")
-    @ResponseBody
-    public boolean isLoggedIn() {
-        return userController.isLogged();
+    private void prepareModel(Model model) {
+        model.addAttribute("logged", userController.isLogged());
+        model.addAttribute("existingUser", userController.isUserAlreadyExists());
     }
 
-//    @RequestMapping("/gamestudio")
-//    public String mainPage(Model model) {
-//        prepareModel(model);
+    //    @RequestMapping("/gamestudio")
+//    private String mainPage() {
 //        return "gamestudio";
 //    }
-//    private void prepareModel(Model model) {
-//        model.addAttribute("logged", userController.isLogged());
-//    }
+
+//    @RequestMapping("/loggedIn")
+//    @ResponseBody
+//    public boolean isLoggedIn() { return userController.isLogged(); }
 }

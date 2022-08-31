@@ -10,15 +10,41 @@
 <body>
 <main layout:fragment="content">
 <!--STATIC-->
-<!--  <form th:if="not ${logged}" action="/login" method="post">-->
-<!--    <label for="login">Meno: </label><input id="login" type="text" name="login" required/> <br/>-->
-<!--    <label for="password">Heslo: </label><input id="password" type="password" name="password" required/> <br/>-->
-<!--    <button type="submit">Prihlásiť sa</button>-->
-<!--  </form>-->
-
-  <form id="loginForm">
-
+  <form th:if="not ${logged}" action="/login" method="post">
+    <label for="login">Meno: </label><input id="login" type="text" name="login" maxlength="32" required/> <br/>
+    <label for="password">Heslo: </label><input id="password" type="password" name="password" required/> <br/>
+    <button type="submit">Prihlásiť sa</button>
   </form>
+  <form th:if="not ${existingUser}" action="/register" method="post">
+    <label for="fullName">Celé meno: </label><input id="fullName" type="text" name="fullName" maxlength="128" required/> <br/>
+
+    <label for="selfEvaluation">Ohodnoť sa: </label>
+    <select id="selfEvaluation" name="selfEvaluation">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select> <br/>
+
+    <label for="country">Vyber si krajinu: </label>
+    <select id="country" name="country">
+    </select> <br/>
+
+    <label for="occupation">Vyber si povolanie: </label>
+    <select id="occupation" name="occupation">
+    </select> <br/>
+
+    <button type="submit">Registrovať sa</button>
+  </form>
+
+
+  <form id="loginForm"></form>
 
   <h2>Hry</h2>
   <ul>
@@ -30,26 +56,111 @@
   </ul>
 
   <script type="text/javascript">
-    const loginForm = document.getElementById("loginForm");
-    fetchLogin("/loggedIn");
+    const loginBtn = document.getElementById("loginBtn");
+    const username = document.getElementById("login");
+    const psswrd = document.getElementById("password");
+    const country = document.getElementById("country");
+    const occupation = document.getElementById("occupation");
 
-    function fetchLogin(url) {
-      fetch(url)
+    createSelectCountry();
+    createSelectOccupation();
+
+    function createSelectCountry() {
+      fetch("/api/country")
+              .then(response => {
+                if (response.ok)
+                  return response.json();
+                else
+                  return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
+              })
+              .then(countries => {
+                const nbOfCountries = countries.length;
+                let htmlCountries = `<select id="country" name="country">`;
+                for (let i = 0; i < nbOfCountries; i++) {
+                  htmlCountries += `<option value="${i}">${countries[i].country}</option>`;
+                }
+                htmlCountries += `</select> <br/>`;
+
+                country.innerHTML = htmlCountries;
+              })
+    }
+
+    function createSelectOccupation() {
+      fetch("/api/occupation")
+              .then(response => {
+                if (response.ok)
+                  return response.json();
+                else
+                  return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
+              })
+              .then(occ => {
+                const nbOfCountries = occ.length;
+                let htmlOcc = `<select id="occupation" name="occupation">`;
+                for (let i = 0; i < nbOfCountries; i++) {
+                  htmlOcc += `<option value="${i}">${occ[i].occupation}</option>`;
+                }
+                htmlOcc += `</select> <br/>`;
+
+                occupation.innerHTML = htmlOcc;
+              })
+    }
+
+    loginBtn.addEventListener("submit", event => {
+      event.preventDefault();
+      console.log("username: " + username + ", password: " + psswrd);
+      submitUsername("/loggedUser", username);
+    })
+
+
+    function submitUsername(url, username) {
+      let login = {
+        login: username,
+      };
+      console.log("login: " + login);
+      const request =
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          body: JSON.stringify(login)
+        }
+      fetch(url, request)
         .then(response => {
           if (response.ok) {
             return response.json();
           } else {
-            return Promise.reject(new Error(`Comments acquisition failed. Server answered with ${response.status}: ${response.statusText}.`));
+            return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
           }
-        })
-        .then(login => {
-
-        })
-        .catch(error => {
-          errorMessage = "Nepodarilo sa získať alebo zobraziť komentáre. Podrobnosti: " + error;
-          elements.scoresTableBody.innerHTML = errorMessage;
         });
     }
+
+    // const loginForm = document.getElementById("loginForm");
+    // fetchLoggedIn("/loggedIn");
+    //
+    // function fetchLoggedIn(url) {
+    //   fetch(url)
+    //           .then(response => {
+    //             if (response.ok) {
+    //               return response.json();
+    //             } else {
+    //               return Promise.reject(new Error(`Comments acquisition failed. Server answered with ${response.status}: ${response.statusText}.`));
+    //             }
+    //           })
+    //           .then(login => {
+    //             if (!login) {
+    //               loginForm.innerHTML = `<form action="/login" method="post">
+    //                                 <label for="login">Meno: </label><input id="login" type="text" name="login" required/> <br/>
+    //                                 <label for="password">Heslo: </label><input id="password" type="password" name="password" required/> <br/>
+    //                                 <button type="submit" id="loginBtn">Prihlásiť sa</button>
+    //                               </form>`;
+    //             }
+    //           })
+    //           .catch(error => {
+    //             errorMessage = "Nepodarilo sa získať alebo zobraziť komentáre. Podrobnosti: " + error;
+    //             elements.scoresTableBody.innerHTML = errorMessage;
+    //           });
+    // }
 
   </script>
 
