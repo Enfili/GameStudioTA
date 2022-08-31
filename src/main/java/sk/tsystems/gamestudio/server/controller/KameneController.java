@@ -21,6 +21,8 @@ import sk.tsystems.gamestudio.service.RatingService;
 import sk.tsystems.gamestudio.service.ScoreService;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/kamene")
@@ -131,6 +133,18 @@ public class KameneController {
     public Field newGameJson() {
         generateNewField();
         return this.field;
+    }
+
+    @RequestMapping(value ="/keyboardControl", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    private void keyboardControl(@RequestBody String key) throws MoveOutOfFieldException {
+        System.out.println(key);
+        Pattern possibleMoves = Pattern.compile("[wasd]");
+        Matcher matcher = possibleMoves.matcher(key);
+        if (matcher.matches()) {
+            this.field.shiftStone(key);
+            processUserInputJson(null, null);
+        }
     }
 
     @RequestMapping(value = "/jsoncomment", produces = MediaType.APPLICATION_JSON_VALUE)

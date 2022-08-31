@@ -17,6 +17,7 @@
     </div>
 
     <section id="field"></section>
+    <button id="keyboardControl" style="visibility: hidden"></button>
 
     <section>
         <div>
@@ -84,9 +85,14 @@
             gameStatus: document.getElementById("gameStatus"),
             averageRating: document.getElementById("averageRating"),
             comments: document.getElementById("commentsTable")
-        }
+        };
 
         const divRatingForm = document.getElementById("averageRatingDivForm");
+
+        document.getElementById("keyboardControl").addEventListener('keyup', event => {
+            event.preventDefault();
+            console.log(event)
+        });
 
         document.getElementById("ratingForm").addEventListener("submit", event => {
             event.preventDefault();
@@ -138,6 +144,22 @@
         }
 
         //---------------------processing
+        function keyboardControl(event) {
+            console.log("key: " + event.key);
+            const request =
+                {
+                    method: 'POST',
+                    body: event.key
+                };
+
+            fetch("/kamene/keyboardControl", request)
+                .then(response => {
+                    if (response.ok)
+                        return response.text();
+                    else
+                        return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
+                });
+        }
 
         function processStoneClick(row, col) {
             fetchAndRenderField(`/kamene/json?row=${row}&column=${col}`, elements);
