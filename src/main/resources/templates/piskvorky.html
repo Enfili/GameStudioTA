@@ -7,7 +7,7 @@
 <head>
     <title>Gamestudio - Piskvorky</title>
 </head>
-<body>
+<body id="body">
 <main layout:fragment="content">
     <h2>Piškvorky</h2>
 
@@ -16,8 +16,8 @@
         <button type="button" id="btNewGame" class="abutton" onclick="processNewGameClick()">Nová hra</button>
     </div>
 
-    <section style="align-items: center">
-        <canvas id="grid" width="600" height="600"></canvas>
+    <section id="wrapper">
+        <canvas id="grid"></canvas>
     </section>
 
     <section>
@@ -81,24 +81,38 @@
 <script type="text/javascript">
 
     let elements = {
-        field: document.getElementById("field"),
         scoresTableBody: document.getElementById("scoresTableBody"),
         averageRating: document.getElementById("averageRating"),
         comments: document.getElementById("commentsTable")
     }
 
     let grid = document.getElementById("grid");
+    grid.width = window.innerWidth * 0.35;
+    grid.height = grid.width;
     let context = grid.getContext("2d");
-    const score = document.getElementById("score");
-
     let gridWidth = grid.offsetWidth;
     let rowCount = 12;
     let cellWidth = gridWidth / rowCount;
 
-    grid.addEventListener("click", addSymbol)
-
+    const score = document.getElementById("score");
     const divRatingForm = document.getElementById("averageRatingDivForm");
 
+    drawCanvas();
+    fetchGrid("/piskvorky/json");
+    fetchAndRenderScores("/api/score/piskvorky", elements);
+    fetchAndRenderRating("/api/rating/avg/piskvorky", elements);
+    fetchAndRenderComments("/api/comment/piskvorky", elements);
+
+    //------------------------------------
+    // LISTENERS
+    //------------------------------------
+    grid.addEventListener("click", addSymbol)
+    window.addEventListener("resize", event => {
+        grid.width = window.innerWidth * 0.35;
+        grid.height = grid.width;
+
+        fetchGrid("/piskvorky/json");
+    })
     document.getElementById("ratingForm").addEventListener("submit", event => {
         event.preventDefault();
         submitRating("http://localhost:8080/piskvorky/jsonrating");
@@ -109,12 +123,6 @@
         submitComment("http://localhost:8080/piskvorky/jsoncomment");
         fetchAndRenderComments("/api/comment/piskvorky", viewElements);
     })
-
-    drawCanvas();
-    fetchGrid("/piskvorky/json");
-    fetchAndRenderScores("/api/score/piskvorky", elements);
-    fetchAndRenderRating("/api/rating/avg/piskvorky", elements);
-    fetchAndRenderComments("/api/comment/piskvorky", elements);
 
     //------------------------------------
     // SUBMITTING
@@ -168,8 +176,6 @@
     }
 
     function processNewGameClick() {
-        context.clearRect(0, 0, gridWidth, gridWidth);
-        drawCanvas();
         fetchGrid("/piskvorky/jsonnew");
     }
 
@@ -205,6 +211,9 @@
                                         </form>
                             `;
                 }
+                calculateCellWidth();
+                context.clearRect(0, 0, gridWidth, gridWidth);
+                drawCanvas();
                 drawSymbols(gridData);
                 drawCrossLines(gridData);
             })
@@ -441,6 +450,7 @@
     function calculateCellWidth() {
         gridWidth = grid.offsetWidth;
         cellWidth = gridWidth / rowCount;
+        console.log("offset: " + grid.offsetWidth + ", width: " + gridWidth + ", cell: " + cellWidth);
     }
 
 </script>
