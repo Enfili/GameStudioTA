@@ -79,8 +79,9 @@ public class MinesweeperController {
     }
 
     @RequestMapping("/asynch")
-    public String loadInAsynchMode() throws TooManyMinesException {
+    public String loadInAsynchMode(Model model) throws TooManyMinesException {
         startOrUpdateGame(null, null);
+        prepareAsynchModel(model);
         return "minesweeperAsynch";
     }
 
@@ -320,6 +321,11 @@ public class MinesweeperController {
         model.addAttribute("gameStatus", getGameStatusMessage());
         model.addAttribute("minesweeperField", this.field.getTiles());
         model.addAttribute("bestScores", scoreService.getBestScores(GAME));
+        model.addAttribute("comments", commentService.getComments(GAME));
+        model.addAttribute("rating", ratingService.getAverageRating(GAME));
+    }
+
+    private void prepareAsynchModel(Model model) {
         model.addAttribute("comments", commentService.getComments(GAME));
         model.addAttribute("rating", ratingService.getAverageRating(GAME));
     }

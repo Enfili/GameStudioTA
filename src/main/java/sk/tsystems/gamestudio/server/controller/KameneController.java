@@ -105,10 +105,11 @@ public class KameneController {
     }
 
     @RequestMapping("/asynch")
-    public String loadInAsynchMode() {
+    public String loadInAsynchMode(Model model) {
         if (this.field == null) {
             generateNewField();
         }
+        prepareAsynchModel(model);
         return "kameneAsynch";
     }
 
@@ -197,6 +198,11 @@ public class KameneController {
         model.addAttribute("field", field.getStones());
         model.addAttribute("playing", isPlaying);
         model.addAttribute("bestScores", scoreService.getBestScores(GAME));
+        model.addAttribute("comments", commentService.getComments(GAME));
+        model.addAttribute("rating", ratingService.getAverageRating(GAME));
+    }
+
+    private void prepareAsynchModel(Model model) {
         model.addAttribute("comments", commentService.getComments(GAME));
         model.addAttribute("rating", ratingService.getAverageRating(GAME));
     }

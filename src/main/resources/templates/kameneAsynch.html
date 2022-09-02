@@ -17,25 +17,19 @@
     </div>
 
     <section id="field"></section>
-    <button id="keyboardControl" style="visibility: hidden"></button>
 
     <section>
         <div>
-            Priemerný rating: <span id="averageRating"></span>
+            Priemerný rating: <span th:text="${rating}"></span>
         </div>
-        <div id="averageRatingDivForm">
-            <label style="visibility: hidden" for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
-            <form style="visibility: hidden" id="ratingForm">
-                <select id="ratingSelect" name="rating">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                <button id="submitRating" type="submit">Pridaj</button> <br/>
-            </form>
-        </div>
+        <div id="averageRatingDivForm"> </div>
+
+<!--ASYNCHRONOUS-->
+<!--        <div>-->
+<!--            Priemerný rating: <span id="averageRating"></span>-->
+<!--        </div>-->
+<!--        <div id="averageRatingDivForm">-->
+<!--        </div>-->
     </section>
 
     <section>
@@ -55,26 +49,48 @@
     </section>
 
     <section>
-        <br/>
         <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>
-        <form id="commentForm">
+        <form action="/kamene/comment" method="post">
             <input id="comment" type="text" name="comment" maxlength="1000"/>
-            <button id="commentSubmit" type="submit">Odoslať</button> <br/>
+            <button type="submit">Odoslať</button> <br/>
         </form>
 
         <div>
             <table class="comments">
-                <thead>
                 <tr>
                     <th>Meno</th>
                     <th>Komentár</th>
                     <th>Dátum</th>
                 </tr>
-                </thead>
-                <tbody id="commentsTable">
-                </tbody>
+                <tr th:each="comment: ${comments}">
+                    <td th:text="${comment.getUsername}"></td>
+                    <td th:text="${comment.getComment}"></td>
+                    <td th:text="${comment.getCommentedOn}"></td>
+                </tr>
             </table>
         </div>
+
+<!--ASYNCHRONOUS-->
+<!--        <br/>-->
+<!--        <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>-->
+<!--        <form id="commentForm">-->
+<!--            <input id="comment" type="text" name="comment" maxlength="1000"/>-->
+<!--            <button id="commentSubmit" type="submit">Odoslať</button> <br/>-->
+<!--        </form>-->
+
+<!--        <div>-->
+<!--            <table class="comments">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th>Meno</th>-->
+<!--                    <th>Komentár</th>-->
+<!--                    <th>Dátum</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody id="commentsTable">-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
     </section>
 
     <script type="text/javascript">
@@ -95,20 +111,20 @@
             fetchAndRenderField("/kamene/json", elements);
         });
 
-        document.getElementById("ratingForm").addEventListener("submit", event => {
-            event.preventDefault();
-            submitRating("http://localhost:8080/kamene/jsonrating");
-            fetchAndRenderRating("/api/rating/avg/kamene", viewElements);
-        });
-        document.getElementById("commentForm").addEventListener("submit", event => {
-            event.preventDefault();
-            submitComment("http://localhost:8080/kamene/jsoncomment");
-            fetchAndRenderComments("/api/comment/kamene", viewElements);
-        })
+        // document.getElementById("ratingForm").addEventListener("submit", event => {
+        //     event.preventDefault();
+        //     submitRating("http://localhost:8080/kamene/jsonrating");
+        //     fetchAndRenderRating("/api/rating/avg/kamene", viewElements);
+        // });
+        // document.getElementById("commentForm").addEventListener("submit", event => {
+        //     event.preventDefault();
+        //     submitComment("http://localhost:8080/kamene/jsoncomment");
+        //     fetchAndRenderComments("/api/comment/kamene", viewElements);
+        // })
 
         fetchAndRenderScores("/api/score/kamene", elements);
-        fetchAndRenderRating("/api/rating/avg/kamene", elements);
-        fetchAndRenderComments("/api/comment/kamene", elements);
+        // fetchAndRenderRating("/api/rating/avg/kamene", elements);
+        // fetchAndRenderComments("/api/comment/kamene", elements);
         fetchAndRenderField("/kamene/json", elements);
 
         //---------------------submitting
@@ -249,18 +265,33 @@
                         elements.gameStatus.innerHTML = "vyhral si";
                         fetchAndRenderScores("/api/score/kamene", elements);
                         divRatingForm.innerHTML = `
-                                    <label for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
-                                        <form id="ratingForm">
-                                            <select id="ratingSelect" name="rating">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                            <button id="submitRating" type="submit">Pridaj</button> <br/>
-                                        </form>
+                            <label htmlFor="rating">Pridaj svoje hodnotenie do hry:</label>
+                            <form action="/kamene/rating" method="post">
+                                <select id="rating" name="rating">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <button type="submit">Pridaj</button>
+                                <br/>
+                            </form>
                             `;
+                        /* ASYNCHRONOUS */
+                        // divRatingForm.innerHTML = `
+                        //             <label for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
+                        //                 <form id="ratingForm">
+                        //                     <select id="ratingSelect" name="rating">
+                        //                         <option value="1">1</option>
+                        //                         <option value="2">2</option>
+                        //                         <option value="3">3</option>
+                        //                         <option value="4">4</option>
+                        //                         <option value="5">5</option>
+                        //                     </select>
+                        //                     <button id="submitRating" type="submit">Pridaj</button> <br/>
+                        //                 </form>
+                        //     `;
                     }
                 })
                 .catch(error => { ////here we process all the failed promises

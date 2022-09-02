@@ -34,21 +34,6 @@
     </div>
 
     <div>
-        <table class="scores">
-            <tr>
-                <th>Meno</th>
-                <th>Body</th>
-                <th>Dátum</th>
-            </tr>
-            <tr th:each="score: ${bestScores}">
-                <td th:text="${score.getUsername}"></td>
-                <td th:text="${score.getPoints}"></td>
-                <td th:text="${score.getPlayedOn}"></td>
-            </tr>
-        </table>
-    </div>
-
-    <div>
         Priemerný rating: <span th:text="${rating}"></span>
     </div>
     <div th:if="not ${playing}">
@@ -63,6 +48,21 @@
             </select>
             <button type="submit">Pridaj</button> <br/>
         </form>
+    </div>
+
+    <div>
+        <table class="scores">
+            <tr>
+                <th>Meno</th>
+                <th>Body</th>
+                <th>Dátum</th>
+            </tr>
+            <tr th:each="score: ${bestScores}">
+                <td th:text="${score.getUsername}"></td>
+                <td th:text="${score.getPoints}"></td>
+                <td th:text="${score.getPlayedOn}"></td>
+            </tr>
+        </table>
     </div>
 
     <br/>

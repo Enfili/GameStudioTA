@@ -47,10 +47,11 @@ public class PiskvorkyController {
     private final String GAME = "piskvorky";
 
     @RequestMapping
-    public String piskvorky() {
+    public String piskvorky(Model model) {
         if (board == null) {
             board = new IfElseAI(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
         }
+        prepareAsynchModel(model);
         return "piskvorky";
     }
 
@@ -96,5 +97,26 @@ public class PiskvorkyController {
     public void setRating(@RequestBody String rating) {
         if (userController.isLogged() && userController.isUserAlreadyExists())
             ratingService.setRating(new Rating(GAME, userController.getLoggedUser(), Integer.parseInt(rating), new Date()));
+    }
+
+    @RequestMapping("/comment")
+    public String addComment(String comment, Model model) {
+        if (userController.isLogged())
+            commentService.addComment(new Comment(GAME, userController.getLoggedUser(), comment, new Date()));
+        prepareAsynchModel(model);
+        return "piskvorky";
+    }
+
+    @RequestMapping("/rating")
+    public String addRating(int rating, Model model) {
+        if (userController.isLogged())
+            ratingService.setRating(new Rating(GAME, userController.getLoggedUser(), rating, new Date()));
+        prepareAsynchModel(model);
+        return "piskvorky";
+    }
+
+    private void prepareAsynchModel(Model model) {
+        model.addAttribute("comments", commentService.getComments(GAME));
+        model.addAttribute("rating", ratingService.getAverageRating(GAME));
     }
 }
