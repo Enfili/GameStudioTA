@@ -1,7 +1,6 @@
-package sk.tsystems.gamestudio.piskvorky;
+package sk.tsystems.gamestudio.piskvorky.core;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class InRow {
 

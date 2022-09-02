@@ -1,6 +1,5 @@
 package sk.tsystems.gamestudio.server.controller;
 
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
@@ -14,17 +13,11 @@ import org.springframework.web.context.WebApplicationContext;
 import sk.tsystems.gamestudio.entity.Comment;
 import sk.tsystems.gamestudio.entity.Rating;
 import sk.tsystems.gamestudio.entity.Score;
-import sk.tsystems.gamestudio.minesweeper.core.Field;
-import sk.tsystems.gamestudio.minesweeper.core.TooManyMinesException;
-import sk.tsystems.gamestudio.piskvorky.Board;
-import sk.tsystems.gamestudio.piskvorky.IfElseAI;
-import sk.tsystems.gamestudio.piskvorky.InRow;
-import sk.tsystems.gamestudio.piskvorky.Symbol;
+import sk.tsystems.gamestudio.piskvorky.logic.IfElseAI;
 import sk.tsystems.gamestudio.service.CommentService;
 import sk.tsystems.gamestudio.service.RatingService;
 import sk.tsystems.gamestudio.service.ScoreService;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 @Controller
@@ -47,7 +40,7 @@ public class PiskvorkyController {
     private final String GAME = "piskvorky";
 
     @RequestMapping
-    public String piskvorky(Model model) {
+    public String piskvorky() {
         if (board == null) {
             board = new IfElseAI(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
         }

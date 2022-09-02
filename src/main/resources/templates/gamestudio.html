@@ -44,7 +44,39 @@
   </form>
 
 
-<!--  <form id="loginForm"></form>-->
+<!--DYNAMIC-->
+<!--  <form th:if="not ${logged}" id="loginForm">-->
+<!--    <label for="login">Meno: </label><input id="login" type="text" name="login" maxlength="32" required/> <br/>-->
+<!--    <label for="password">Heslo: </label><input id="password" type="password" name="password" required/> <br/>-->
+<!--    <button type="submit">Prihlásiť sa</button>-->
+<!--  </form>-->
+<!--  <form th:if="not ${existingUser}" id="registerForm">-->
+<!--    <label for="fullName">Celé meno: </label><input id="fullName" type="text" name="fullName" maxlength="128" required/> <br/>-->
+
+<!--    <label for="selfEvaluation">Ohodnoť sa: </label>-->
+<!--    <select id="selfEvaluation" name="selfEvaluation">-->
+<!--      <option value="1">1</option>-->
+<!--      <option value="2">2</option>-->
+<!--      <option value="3">3</option>-->
+<!--      <option value="4">4</option>-->
+<!--      <option value="5">5</option>-->
+<!--      <option value="6">6</option>-->
+<!--      <option value="7">7</option>-->
+<!--      <option value="8">8</option>-->
+<!--      <option value="9">9</option>-->
+<!--      <option value="10">10</option>-->
+<!--    </select> <br/>-->
+
+<!--    <label for="country">Vyber si krajinu: </label>-->
+<!--    <select id="country" name="country">-->
+<!--    </select> <br/>-->
+
+<!--    <label for="occupation">Vyber si povolanie: </label>-->
+<!--    <select id="occupation" name="occupation">-->
+<!--    </select> <br/>-->
+
+<!--    <button type="submit">Registrovať sa</button>-->
+<!--  </form>-->
 
   <h2>Hry</h2>
   <ul>
@@ -56,9 +88,8 @@
   </ul>
 
   <script type="text/javascript">
-    const loginBtn = document.getElementById("loginBtn");
+    const loginForm = document.getElementById("loginForm");
     const username = document.getElementById("login");
-    const psswrd = document.getElementById("password");
     const country = document.getElementById("country");
     const occupation = document.getElementById("occupation");
 
@@ -105,30 +136,26 @@
               })
     }
 
-    loginBtn.addEventListener("submit", event => {
+    loginForm.addEventListener("submit", event => {
       event.preventDefault();
-      console.log("username: " + username + ", password: " + psswrd);
-      submitUsername("/loggedUser", username);
+      submitUsername("http://localhost:8080/loggedUser");
     })
 
-
-    function submitUsername(url, username) {
+    function submitUsername(url) {
       let login = {
-        login: username,
+        login: username.value.trim(),
       };
-      console.log("login: " + login);
+      console.log(username.value.trim());
       const request =
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          body: JSON.stringify(login)
+          // headers: {'Content-Type': 'application/json;charset=utf-8'},
+          body: username.value.trim()
         }
       fetch(url, request)
         .then(response => {
           if (response.ok) {
-            return response.json();
+            return response.text();
           } else {
             return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
           }

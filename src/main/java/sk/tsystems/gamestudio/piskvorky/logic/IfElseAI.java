@@ -1,8 +1,11 @@
-package sk.tsystems.gamestudio.piskvorky;
+package sk.tsystems.gamestudio.piskvorky.logic;
+
+import sk.tsystems.gamestudio.piskvorky.core.Board;
+import sk.tsystems.gamestudio.piskvorky.core.InRow;
 
 import java.util.Random;
 
-public class IfElseAI extends Board{
+public class IfElseAI extends Board {
 
     public IfElseAI(int rows, int columns) {
         super(rows, columns);

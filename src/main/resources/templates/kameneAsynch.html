@@ -89,6 +89,8 @@
 
         const divRatingForm = document.getElementById("averageRatingDivForm");
 
+        let playing = true;
+
         fetchAndRenderScores("/api/score/kamene", elements);
         fetchAndRenderRating("/api/rating/avg/kamene", elements);
         fetchAndRenderComments("/api/comment/kamene", elements);
@@ -96,10 +98,11 @@
 
         //---------------------listeners
         document.getElementById("body").addEventListener('keyup', event => {
-            event.preventDefault();
-            keyboardControl(event);
+            if (playing) {
+                event.preventDefault();
+                keyboardControl(event);
+            }
         });
-
         document.getElementById("ratingForm").addEventListener("submit", event => {
             event.preventDefault();
             submitRating("http://localhost:8080/kamene/jsonrating");
@@ -250,10 +253,12 @@
                     if (!fieldData.solved) {
                         elements.gameStatus.innerHTML = "hrá sa";
                         divRatingForm.style.visibility = 'hidden';
+                        playing = true;
                     } else {
                         elements.gameStatus.innerHTML = "vyhral si";
                         fetchAndRenderScores("/api/score/kamene", elements);
                         divRatingForm.style.visibility = 'visible';
+                        playing = false;
                     }
                 })
                 .catch(error => { ////here we process all the failed promises

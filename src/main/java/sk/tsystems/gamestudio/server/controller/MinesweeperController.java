@@ -79,7 +79,7 @@ public class MinesweeperController {
     }
 
     @RequestMapping("/asynch")
-    public String loadInAsynchMode(Model model) throws TooManyMinesException {
+    public String loadInAsynchMode() throws TooManyMinesException {
         startOrUpdateGame(null, null);
 //        prepareAsynchModel(model);
         return "minesweeperAsynch";

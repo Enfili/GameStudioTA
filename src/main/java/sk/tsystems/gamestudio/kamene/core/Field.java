@@ -91,7 +91,7 @@ public class Field implements Serializable {
         }
     }
 
-    public void shiftStone(String shift) throws MoveOutOfFieldException {
+    public boolean shiftStone(String shift) throws MoveOutOfFieldException {
         int emptyRow = this.getEmptyStoneRow();
         int emptyColumn = this.getEmptyStoneColumn();
         switch (shift) {
@@ -99,35 +99,40 @@ public class Field implements Serializable {
             case "up":
                 if (emptyRow + 1 < this.getRowCount()) {
                     swapStones(this.getStones()[emptyRow + 1][emptyColumn]);
+                    return true;
                 } else {
-                    throw new MoveOutOfFieldException("Out of this field move.");
+                    return false;
+//                    throw new MoveOutOfFieldException("Out of this field move.");
                 }
-                break;
             case "a":
             case "left":
                 if (emptyColumn + 1 < this.getColumnCount()) {
                     swapStones(this.getStones()[emptyRow][emptyColumn + 1]);
+                    return true;
                 } else {
-                    throw new MoveOutOfFieldException("Out of this field move.");
+                    return false;
+//                    throw new MoveOutOfFieldException("Out of this field move.");
                 }
-                break;
             case "s":
             case "down":
                 if (emptyRow - 1 >= 0) {
                     swapStones(this.getStones()[emptyRow - 1][emptyColumn]);
+                    return true;
                 } else {
-                    throw new MoveOutOfFieldException("Out of this field move.");
+                    return false;
+//                    throw new MoveOutOfFieldException("Out of this field move.");
                 }
-                break;
             case "d":
             case "right":
                 if (emptyColumn - 1 >= 0) {
                     swapStones(this.getStones()[emptyRow][emptyColumn - 1]);
+                    return true;
                 } else {
-                    throw new MoveOutOfFieldException("Out of this field move.");
+                    return false;
+//                    throw new MoveOutOfFieldException("Out of this field move.");
                 }
-                break;
         }
+        return false;
     }
 
     private void swapStones(Stone stone) {

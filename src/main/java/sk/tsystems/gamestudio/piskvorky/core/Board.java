@@ -1,4 +1,4 @@
-package sk.tsystems.gamestudio.piskvorky;
+package sk.tsystems.gamestudio.piskvorky.core;
 
 import java.util.*;
 
@@ -11,10 +11,10 @@ public class Board {
     private int move;
     private int[] score;
     // maps to remember symbols (inRows) that are in given direction on board
-    Map<String, ArrayList<InRow>> symbolsInRow;
+    protected Map<String, ArrayList<InRow>> symbolsInRow;
     private Map<String, ArrayList<InRow>> crossedSymbols;
 
-    final String[] DIRECTIONS = {"down", "right", "upRight", "downRight"};
+    protected final String[] DIRECTIONS = {"down", "right", "upRight", "downRight"};
 
     public Board(int rows, int columns) {
         rowCount = rows;

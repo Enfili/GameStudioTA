@@ -2,6 +2,7 @@ package sk.tsystems.gamestudio.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,10 +72,12 @@ public class UserController {
         return userAlreadyExists;
     }
 
-    //    @RequestMapping("/loggedUser")
+//    @RequestMapping("/loggedUser")
 //    @ResponseBody
-//    public void loginUser(String login) {
-//        System.out.println("login: " + login);
-//        this.loggedUser = login.trim();
+//    public String loginUser(String username) {
+//        System.out.println("username: " + username);
+//        this.loggedUser = username.trim();
+//
+//        return "gamestudio";
 //    }
 }

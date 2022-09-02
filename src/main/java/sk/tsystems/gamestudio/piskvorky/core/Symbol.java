@@ -1,4 +1,4 @@
-package sk.tsystems.gamestudio.piskvorky;
+package sk.tsystems.gamestudio.piskvorky.core;
 
 public class Symbol {
 
@@ -24,11 +24,4 @@ public class Symbol {
         this.state = state;
     }
 
-    public boolean isCrossedOut() {
-        return crossedOut;
-    }
-
-    public void setCrossedOut(boolean crossedOut) {
-        this.crossedOut = crossedOut;
-    }
 }

@@ -66,24 +66,26 @@ public class KameneController {
                 numberOfMoves++;
             }
         }
-        if (field.isSolved()) {
-            isPlaying = false;
-            int score = NUMBER_OF_SHUFFLE_MOVES * 10 - numberOfMoves;
-            if (userController.isLogged())
-                scoreService.addScore(new Score(GAME, userController.getLoggedUser(), score, new Date()));
-        }
+        finishGame();
 
         prepareModel(model);
         return "kamene";
     }
 
+    private void finishGame() {
+        if (field.isSolved()) {
+            int score = NUMBER_OF_SHUFFLE_MOVES * 10 - numberOfMoves;
+            if (userController.isLogged() && isPlaying) {
+                scoreService.addScore(new Score(GAME, userController.getLoggedUser(), score, new Date()));
+            }
+            isPlaying = false;
+        }
+    }
+
     @RequestMapping("/new")
     public String newGame(Model model) {
-        field = new Field(ROW_COUNT, COLUMN_COUNT);
-        field.shuffle(NUMBER_OF_SHUFFLE_MOVES);
-        numberOfMoves = 0;
-        if (!field.isSolved())
-            isPlaying = true;
+        generateNewField();
+        finishGame();
         prepareModel(model);
         return "kamene";
     }
@@ -105,9 +107,10 @@ public class KameneController {
     }
 
     @RequestMapping("/asynch")
-    public String loadInAsynchMode(Model model) {
+    public String loadInAsynchMode() {
         if (this.field == null) {
             generateNewField();
+            finishGame();
         }
 //        prepareAsynchModel(model);
         return "kameneAsynch";
@@ -123,9 +126,7 @@ public class KameneController {
                 this.numberOfMoves++;
             }
         }
-        if (field.isSolved() && userController.isLogged()) {
-            scoreService.addScore(new Score(GAME, userController.getLoggedUser(), NUMBER_OF_SHUFFLE_MOVES * 10 - numberOfMoves, new Date()));
-        }
+        finishGame();
         return this.field;
     }
 
@@ -144,10 +145,12 @@ public class KameneController {
             Matcher matcher = possibleMoves.matcher(key);
             if (matcher.matches()) {
                 try {
-                    this.field.shiftStone(key);
-                    processUserInputJson(null, null);
+                    if (this.field.shiftStone(key)) {
+                        numberOfMoves++;
+                        processUserInputJson(null, null);
+                    }
                 } catch (MoveOutOfFieldException e) {
-                    return;
+                    System.out.println("Move is out of this field. " + e.getMessage());
                 }
             }
         }
@@ -169,6 +172,7 @@ public class KameneController {
     }
 
     private void generateNewField() {
+        isPlaying = true;
         this.field = new Field(ROW_COUNT, COLUMN_COUNT);
         this.field.shuffle(NUMBER_OF_SHUFFLE_MOVES);
         this.numberOfMoves = 0;
