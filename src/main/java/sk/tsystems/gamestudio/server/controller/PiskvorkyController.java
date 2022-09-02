@@ -51,7 +51,7 @@ public class PiskvorkyController {
         if (board == null) {
             board = new IfElseAI(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
         }
-        prepareAsynchModel(model);
+//        prepareAsynchModel(model);
         return "piskvorky";
     }
 

@@ -33,11 +33,11 @@
 
     <section>
         <div>
-            Priemerný rating: <span th:text="${rating}"></span>
+            Priemerný rating: <span id="averageRating"></span>
         </div>
         <div id="averageRatingDivForm">
-            <label for="rating">Pridaj svoje hodnotenie do hry:</label>
-            <form action="/minesweeper/rating" method="post">
+            <form id="ratingForm">
+                <label for="rating">Pridaj svoje hodnotenie do hry:</label>
                 <select id="rating" name="rating">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -45,16 +45,10 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
-                <button type="submit">Pridaj</button> <br/>
+                <button type="submit">Pridaj</button>
+                <br/>
             </form>
         </div>
-
-<!--ASYNCHRONOUS-->
-<!--        <div>-->
-<!--            Priemerný rating: <span id="averageRating"></span>-->
-<!--        </div>-->
-<!--        <div id="averageRatingDivForm">-->
-<!--        </div>-->
     </section>
 
     <section>
@@ -74,29 +68,6 @@
     </section>
 
     <section>
-<!--        <br/>-->
-<!--        <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>-->
-<!--        <form id="commentForm" action="/minesweeper/comment" method="post">-->
-<!--            <input id="comment" type="text" name="comment" maxlength="1000"/>-->
-<!--            <button id="commentSubmit" type="submit">Odoslať</button> <br/>-->
-<!--        </form>-->
-
-<!--        <div>-->
-<!--        <table class="comments">-->
-<!--            <tr>-->
-<!--                <th>Meno</th>-->
-<!--                <th>Komentár</th>-->
-<!--                <th>Dátum</th>-->
-<!--            </tr>-->
-<!--            <tr th:each="comment: ${comments}">-->
-<!--                <td th:text="${comment.getUsername}"></td>-->
-<!--                <td th:text="${comment.getComment}"></td>-->
-<!--                <td th:text="${comment.getCommentedOn}"></td>-->
-<!--            </tr>-->
-<!--        </table>-->
-<!--        </div>-->
-
-<!--ASYNCHRONOUS-->
         <br/>
         <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>
         <form id="commentForm">
@@ -130,14 +101,12 @@
             comments: document.getElementById("commentsTable")
         }
 
-        const rating = document.getElementById("ratingSelect");
         const divRatingForm = document.getElementById("averageRatingDivForm");
 
-        // document.getElementById("ratingForm").addEventListener("submit", event => {
-        //     event.preventDefault();
-        //     submitRating("http://localhost:8080/minesweeper/jsonrating");
-        //     fetchAndRenderRating("/api/rating/avg/minesweeper", viewElements);
-        // });
+        document.getElementById("ratingForm").addEventListener("submit", event => {
+            event.preventDefault();
+            submitRating("http://localhost:8080/minesweeper/jsonrating");
+        });
         document.getElementById("commentForm").addEventListener("submit", event => {
             event.preventDefault();
             submitComment("http://localhost:8080/minesweeper/jsoncomment");
@@ -146,7 +115,7 @@
         //--------------------------------------------------------------------------------
 
         fetchAndRenderBestScores("/api/score/minesweeper", viewElements);
-        // fetchAndRenderRating("/api/rating/avg/minesweeper", viewElements);
+        fetchAndRenderRating("/api/rating/avg/minesweeper", viewElements);
         fetchAndRenderComments("/api/comment/minesweeper", viewElements);
         fetchGameFieldAndRenderAll("/minesweeper/json", viewElements);
 
@@ -173,13 +142,13 @@
             fetchAndRenderComments("/api/comment/minesweeper", viewElements);
         }
 
-        function submitRating(url) {
+        async function submitRating(url) {
             const request =
                 {
                     method: 'POST',
-                    body: document.getElementById("ratingSelect").options[rating.selectedIndex].value
+                    body: document.getElementById("rating").options[rating.selectedIndex].value
                 }
-            fetch(url, request)
+            await fetch(url, request)
                 .then(response => {
                     if (response.ok) {
                         return response.text();
@@ -187,6 +156,8 @@
                         return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
                     }
                 });
+
+            fetchAndRenderRating("/api/rating/avg/minesweeper", viewElements);
         }
 
         //--------------------------------------------------------------------------------
@@ -226,7 +197,7 @@
                 .catch(error => { ////here we process all the failed promises
                     errorMessage = "Nepodarilo sa získať alebo zobraziť komentáre. Podrobnosti: " + error;
                     // console.log(errorMessage);
-                    elements.scoresTableBody.innerHTML = errorMessage;
+                    elements.comments.innerHTML = errorMessage;
                 });
         }
 
@@ -240,13 +211,12 @@
                     }
                 })
                 .then(rating => { //here we process the returned response data in JSON ...
-                    console.log(rating);
                     renderRating(rating, viewElements);
                 })
                 .catch(error => { ////here we process all the failed promises
                     errorMessage = "Nepodarilo sa získať alebo zobraziť priemerný rating. Podrobnosti: " + error;
-                    console.log(errorMessage);
-                    //viewElements.minesweeperField.innerHTML =errorMessage;
+                    // console.log(errorMessage);
+                    viewElements.averageRating.innerHTML =errorMessage;
                 });
         }
 
@@ -264,7 +234,7 @@
                 })
                 .catch(error => { ////here we process all the failed promises
                     errorMessage = "Nepodarilo sa získať alebo zobraziť údaje o najlepších skóre. Podrobnosti: " + error;
-                    viewElements.minesweeperField.innerHTML =errorMessage;
+                    viewElements.scoresTableBody.innerHTML =errorMessage;
                 });
         }
 
@@ -305,29 +275,14 @@
                     if (gameFieldData.justFinished) {
                         fetchAndRenderBestScores("/api/score/minesweeper", viewElements);
                         divRatingForm.style.visibility = 'visible';
-
-                        /* ASYNCHRONOUS */
-                        // divRatingForm.innerHTML = `
-                        //             <label for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
-                        //                 <form id="ratingForm">
-                        //                     <select id="ratingSelect" name="rating">
-                        //                         <option value="1">1</option>
-                        //                         <option value="2">2</option>
-                        //                         <option value="3">3</option>
-                        //                         <option value="4">4</option>
-                        //                         <option value="5">5</option>
-                        //                     </select>
-                        //                     <button id="submitRating" type="submit">Pridaj</button> <br/>
-                        //                 </form>
-                        //     `;
                     } else {
                         divRatingForm.style.visibility = 'hidden';
                     }
                 })
                 .catch(error => { ////here we process all the failed promises
                     errorMessage = "Nepodarilo sa získať alebo zobraziť herné pole so servera. Podrobnosti: " + error;
-                    console.log(errorMessage);
-                    //viewElements.minesweeperField.innerHTML =errorMessage;
+                    // console.log(errorMessage);
+                    viewElements.minesweeperField.innerHTML = errorMessage;
                 });
         }
 

@@ -109,7 +109,7 @@ public class KameneController {
         if (this.field == null) {
             generateNewField();
         }
-        prepareAsynchModel(model);
+//        prepareAsynchModel(model);
         return "kameneAsynch";
     }
 
