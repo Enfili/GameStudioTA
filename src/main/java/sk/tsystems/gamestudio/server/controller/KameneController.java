@@ -34,7 +34,7 @@ public class KameneController {
     private final int COLUMN_COUNT = 4;
 //    private Field field = new Field(ROW_COUNT, COLUMN_COUNT);
     private Field field;
-    private final int NUMBER_OF_SHUFFLE_MOVES = 6;
+    private final int NUMBER_OF_SHUFFLE_MOVES = 3;
 
     private boolean newGame = true;
     private int numberOfMoves = 0;
@@ -163,6 +163,7 @@ public class KameneController {
     @RequestMapping(value = "/jsonrating", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void setRating(@RequestBody String rating) {
+        System.out.println(rating);
         if (userController.isLogged() && userController.isUserAlreadyExists())
             ratingService.setRating(new Rating(GAME, userController.getLoggedUser(), Integer.parseInt(rating), new Date()));
     }

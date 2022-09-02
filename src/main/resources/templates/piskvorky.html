@@ -24,7 +24,19 @@
         <div>
             Priemerný rating: <span th:text="${rating}"></span>
         </div>
-        <div id="averageRatingDivForm"> </div>
+        <div id="averageRatingDivForm">
+            <label for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
+            <form id="ratingForm" action="/piskvorky/rating" method="post">
+                <select id="ratingSelect" name="rating">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <button id="submitRating" type="submit">Pridaj</button> <br/>
+            </form>
+        </div>
 
 <!--ASYNCHRONOUS-->
 <!--        <div>-->
@@ -50,48 +62,48 @@
     </section>
 
     <section>
-        <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>
-        <form action="/piskvorky/comment" method="post">
-            <input id="comment" type="text" name="comment" maxlength="1000"/>
-            <button type="submit">Odoslať</button> <br/>
-        </form>
-
-        <div>
-            <table class="comments">
-                <tr>
-                    <th>Meno</th>
-                    <th>Komentár</th>
-                    <th>Dátum</th>
-                </tr>
-                <tr th:each="comment: ${comments}">
-                    <td th:text="${comment.getUsername}"></td>
-                    <td th:text="${comment.getComment}"></td>
-                    <td th:text="${comment.getCommentedOn}"></td>
-                </tr>
-            </table>
-        </div>
-
-<!--ASYNCHRONOUS-->
-<!--        <br/>-->
 <!--        <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>-->
-<!--        <form id="commentForm">-->
+<!--        <form action="/piskvorky/comment" method="post">-->
 <!--            <input id="comment" type="text" name="comment" maxlength="1000"/>-->
-<!--            <button id="commentSubmit" type="submit">Odoslať</button> <br/>-->
+<!--            <button type="submit">Odoslať</button> <br/>-->
 <!--        </form>-->
 
 <!--        <div>-->
 <!--            <table class="comments">-->
-<!--                <thead>-->
 <!--                <tr>-->
 <!--                    <th>Meno</th>-->
 <!--                    <th>Komentár</th>-->
 <!--                    <th>Dátum</th>-->
 <!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody id="commentsTable">-->
-<!--                </tbody>-->
+<!--                <tr th:each="comment: ${comments}">-->
+<!--                    <td th:text="${comment.getUsername}"></td>-->
+<!--                    <td th:text="${comment.getComment}"></td>-->
+<!--                    <td th:text="${comment.getCommentedOn}"></td>-->
+<!--                </tr>-->
 <!--            </table>-->
 <!--        </div>-->
+
+<!--ASYNCHRONOUS-->
+        <br/>
+        <label for="comment">Zadaj komentár, ak sa na to cítiš:</label> <br/>
+        <form id="commentForm">
+            <input id="comment" type="text" name="comment" maxlength="1000"/>
+            <button id="commentSubmit" type="submit">Odoslať</button> <br/>
+        </form>
+
+        <div>
+            <table class="comments">
+                <thead>
+                <tr>
+                    <th>Meno</th>
+                    <th>Komentár</th>
+                    <th>Dátum</th>
+                </tr>
+                </thead>
+                <tbody id="commentsTable">
+                </tbody>
+            </table>
+        </div>
     </section>
 
 <script type="text/javascript">
@@ -116,8 +128,8 @@
     drawCanvas();
     fetchGrid("/piskvorky/json");
     fetchAndRenderScores("/api/score/piskvorky", elements);
-    // fetchAndRenderRating("/api/rating/avg/piskvorky", elements);
-    // fetchAndRenderComments("/api/comment/piskvorky", elements);
+    fetchAndRenderRating("/api/rating/avg/piskvorky", elements);
+    fetchAndRenderComments("/api/comment/piskvorky", elements);
 
     //------------------------------------
     // LISTENERS
@@ -129,27 +141,25 @@
 
         fetchGrid("/piskvorky/json");
     })
-    // document.getElementById("ratingForm").addEventListener("submit", event => {
-    //     event.preventDefault();
-    //     submitRating("http://localhost:8080/piskvorky/jsonrating");
-    //     fetchAndRenderRating("/api/rating/avg/piskvorky", viewElements);
-    // });
-    // document.getElementById("commentForm").addEventListener("submit", event => {
-    //     event.preventDefault();
-    //     submitComment("http://localhost:8080/piskvorky/jsoncomment");
-    //     fetchAndRenderComments("/api/comment/piskvorky", viewElements);
-    // })
+    document.getElementById("ratingForm").addEventListener("submit", event => {
+        event.preventDefault();
+        submitRating("http://localhost:8080/piskvorky/jsonrating");
+    });
+    document.getElementById("commentForm").addEventListener("submit", event => {
+        event.preventDefault();
+        submitComment("http://localhost:8080/piskvorky/jsoncomment");
+    })
 
     //------------------------------------
     // SUBMITTING
     //------------------------------------
-    function submitComment(url) {
+    async function submitComment(url) {
         const request =
             {
                 method: 'POST',
                 body: document.getElementById("comment").value.trim()
             }
-        fetch(url, request)
+        await fetch(url, request)
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -157,15 +167,17 @@
                     return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
                 }
             });
+
+        fetchAndRenderComments("/api/comment/piskvorky", elements);
     }
 
-    function submitRating(url) {
+    async function submitRating(url) {
         const request =
             {
                 method: 'POST',
                 body: document.getElementById("ratingSelect").options[rating.selectedIndex].value
             }
-        fetch(url, request)
+        await fetch(url, request)
             .then(response => {
                 if (response.ok) {
                     return response.text();
@@ -173,6 +185,8 @@
                     return Promise.reject(new Error(`Server answered with ${response.status}: ${response.statusText}.`));
                 }
             });
+
+        fetchAndRenderRating("/api/rating/avg/piskvorky", elements);
     }
 
     //------------------------------------
@@ -213,19 +227,7 @@
                                    <span style="color:red; font-size:200%;">${gridData.score[1]}</span>`;
                 if (!gridData.playing) {
                     fetchAndRenderScores("/api/score/piskvorky", elements);
-                    divRatingForm.innerHTML = `
-                                    <label for="ratingSelect">Pridaj svoje hodnotenie do hry:</label>
-                                        <form id="ratingForm" action="/piskvorky/rating" method="post">
-                                            <select id="ratingSelect" name="rating">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                            <button id="submitRating" type="submit">Pridaj</button> <br/>
-                                        </form>
-                            `;
+                    divRatingForm.style.visibility = 'visible';
 
                     /* ASYNCHRONOUS */
                     // divRatingForm.innerHTML = `
@@ -241,6 +243,8 @@
                     //                         <button id="submitRating" type="submit">Pridaj</button> <br/>
                     //                     </form>
                     //         `;
+                } else {
+                    divRatingForm.style.visibility = 'hidden';
                 }
                 calculateCellWidth();
                 context.clearRect(0, 0, gridWidth, gridWidth);

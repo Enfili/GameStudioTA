@@ -22,6 +22,7 @@ public class GameStudioServer {
     @Bean
     public CommentService commentService() {
         return new CommentServiceJPA();
+//        return new CommentServiceRest();
     }
 
     @Bean
@@ -40,10 +41,10 @@ public class GameStudioServer {
         return new PlayerServiceJPA();
     }
 
-//    @Bean
-//    public RestTemplate restTemplate() {
-//        return new RestTemplate();
-//    }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
 }
 

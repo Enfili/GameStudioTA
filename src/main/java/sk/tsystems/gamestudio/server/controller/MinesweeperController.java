@@ -326,7 +326,7 @@ public class MinesweeperController {
     }
 
     private void prepareAsynchModel(Model model) {
-        model.addAttribute("comments", commentService.getComments(GAME));
+//        model.addAttribute("comments", commentService.getComments(GAME));
         model.addAttribute("rating", ratingService.getAverageRating(GAME));
     }
 }
